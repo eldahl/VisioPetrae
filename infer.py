@@ -4,12 +4,94 @@ from PIL import Image
 from transformers import GenerationConfig
 from gptqmodel import GPTQModel
 
-from fastapi import FastAPI
+from fastapi import FastAPI, UploadFile, Form, File
+from fastapi.responses import HTMLResponse, PlainTextResponse
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Or specify ["http://localhost:5500"] or your frontend URL
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
-@app.post("/infer")
-def infer():
+UPLOAD_DIR = "uploads"
+os.makedirs(UPLOAD_DIR, exist_ok=True)
+
+@app.get("/", response_class=HTMLResponse)
+async def inferPage():
+    return """
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+      <meta charset="UTF-8">
+      <title>Image + Prompt Upload</title>
+      <style>
+        body {
+          font-family: sans-serif;
+          max-width: 500px;
+          margin: 2rem auto;
+        }
+        label, input, textarea, button {
+          display: block;
+          width: 100%;
+          margin-bottom: 1rem;
+        }
+      </style>
+    </head>
+    <body>
+      <h2>Upload Image with Prompt</h2>
+      <form id="uploadForm">
+        <label for="image">Choose an image:</label>
+        <input type="file" id="image" name="image" accept="image/*" required>
+
+        <label for="prompt">Enter prompt:</label>
+        <textarea id="prompt" name="prompt" rows="4" required></textarea>
+
+        <button type="submit">Send to Server</button>
+      </form>
+
+      <div id="response"></div>
+
+      <script>
+        document.getElementById('uploadForm').addEventListener('submit', async (e) => {
+          e.preventDefault();
+
+          const form = e.target;
+          const formData = new FormData();
+          const imageFile = form.image.files[0];
+          const promptText = form.prompt.value;
+
+          formData.append('image', imageFile);
+          formData.append('prompt', promptText);
+
+          try {
+            const response = await fetch('http://192.168.1.229:8000/infer', {
+              method: 'POST',
+              body: formData
+            });
+
+            const result = await response.text();
+            document.getElementById('response').innerText = result;
+          } catch (error) {
+            document.getElementById('response').innerText = 'Error: ' + error.message;
+          }
+        });
+      </script>
+    </body>
+    </html>
+    """
+
+@app.post("/infer", response_class=PlainTextResponse)
+async def infer(image: UploadFile = File(...), prompt: str = Form(...)):
+    # Save file to disk
+    file_location = os.path.join(UPLOAD_DIR, image.filename)
+    with open(file_location, "wb") as f:
+        content = await image.read()
+        f.write(content)
+
     # load model
     # customize load device
     load_device = "cuda:0"
@@ -27,11 +109,13 @@ def infer():
     # and without batching. For other input types and batch inference, please refer to
     # https://huggingface.co/AIDC-AI/Ovis2-34B.
     #image_path = input("Enter image path: ")
-    image_path = os.environ['OVIS_IMAGE']
+    #image_path = os.environ['OVIS_IMAGE']
+    image_path = file_location #os.environ['OVIS_IMAGE']
     images = [Image.open(image_path)]
     max_partition = 9
     #text = input("Enter prompt: ")
-    text = os.environ['OVIS_PROMPT']
+    #text = os.environ['OVIS_PROMPT']
+    text = prompt #os.environ['OVIS_PROMPT']
     query = f'<image>\n{text}'
 
     # format conversation
