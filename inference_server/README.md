@@ -3,7 +3,7 @@ This is a simple inference server using FastAPI that interfaces with the Ovis2 V
 
 # Install
 
-Run inferecne server setup script with:
+Run inference server setup script with:
 ```
 chmod +x ovis-setup.sh
 ./ovis-setup.sh

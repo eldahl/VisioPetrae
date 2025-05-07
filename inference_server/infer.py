@@ -68,7 +68,7 @@ async def inferPage():
           formData.append('prompt', promptText);
 
           try {
-            const response = await fetch('http://192.168.1.229:8000/infer', {
+            const response = await fetch('http://vps.edc.lol:3000/infer', {
               method: 'POST',
               body: formData
             });
@@ -115,8 +115,8 @@ async def infer(image: UploadFile = File(...), prompt: str = Form(...)):
     max_partition = 9
     #text = input("Enter prompt: ")
     #text = os.environ['OVIS_PROMPT']
-    text = prompt #os.environ['OVIS_PROMPT']
-    query = f'<image>\n{text}'
+    #text = prompt #os.environ['OVIS_PROMPT']
+    query = f'<image>\n{prompt}'
 
     # format conversation
     prompt, input_ids, pixel_values = model.preprocess_inputs(query, images, max_partition=max_partition)
