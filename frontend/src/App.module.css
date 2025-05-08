@@ -1,8 +1,19 @@
-.App {
-  text-align: center;
+
+body {
   background: linear-gradient(to bottom, #4b0082, #add8e6, #e6e6fa);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.App {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  text-align: center;
+  /*background: linear-gradient(to bottom, #4b0082, #add8e6, #e6e6fa);*/
   padding-top: 70px; /* Adjust padding to match new header height */
-  height: 100vh;
 }
 
 .logo {
@@ -43,7 +54,7 @@
   display: flex;
   justify-content: space-around;
   background: none;
-  padding: 20px 0;
+  padding: 4px 0;
 }
 
 .card {
@@ -212,7 +223,7 @@
 }
 
 .clouds, .cloudsInfScroll {
-  width: 1920px;
+  width: 200%;
   height: 480px;
   position: absolute;
   top: 0;
@@ -223,7 +234,7 @@
 }
 
 .cloudsInfScroll {
-  left: 1920px;
+  left: 200%;
 }
 
 .welcomeContainer h1 {
@@ -249,18 +260,44 @@
 @media (min-width: 769px) {
   .cardContainer {
     flex-direction: row;
+    gap: 20px;
+    margin: 0 20px;
   }
 }
 
 @media (max-width: 400px) {
+  .welcomeContainer {
+    background-size: 320px;
+    height: 320px;
+  }
   .welcomeContainer h1 {
     font-size: 36px;
+    margin-top: -150px;
+  }
+  .clouds, .cloudsInfScroll {
+    margin-top: -100px;
+    width: 2400px;
+  }
+  .cloudsInfScroll {
+    left: 2400px;
   }
 }
 
 @media (min-width: 401px) and (max-width: 600px) {
+  .welcomeContainer {
+    background-size: 360px;
+    height: 360px;
+  }
   .welcomeContainer h1 {
     font-size: 40px;
+    margin-top: -200px;
+  }
+  .clouds, .cloudsInfScroll {
+    margin-top: -80px;
+    width: 2800px;
+  }
+  .cloudsInfScroll {
+    left: 2800px;
   }
 }
 
@@ -268,11 +305,37 @@
   .welcomeContainer h1 {
     font-size: 55px;
   }
+  .clouds, .cloudsInfScroll {
+    margin-top: -30px;
+    width: 3840px;
+  }
+  .cloudsInfScroll {
+    left: 3840px;
+  }
 }
-
 @media (min-width: 1201px) {
   .welcomeContainer h1 {
     font-size: 55px;
+  }
+  .clouds, .cloudsInfScroll {
+    margin-top: -30px;
+    width: 3840px;
+  }
+  .cloudsInfScroll {
+    left: 3840px;
+  }
+}
+
+@media (min-width: 1921px) {
+  .welcomeContainer h1 {
+    font-size: 55px;
+  }
+  .clouds, .cloudsInfScroll {
+    margin-top: -30px;
+    width: 3840px;
+  }
+  .cloudsInfScroll {
+    left: 3840px;
   }
 }
 

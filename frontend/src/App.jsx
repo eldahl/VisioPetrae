@@ -67,7 +67,7 @@ function App() {
       </header>
       <div class={styles.welcomeContainer}>
         <h1>What can Visio Petrae <br />do for you?</h1>
-        <svg class={styles.clouds} xmlns="http://www.w3.org/2000/svg" viewBox="0 -8 100 25" fill="none" stroke="currentColor" strokeWidth="0.5">
+        <svg class={styles.clouds} xmlns="http://www.w3.org/2000/svg" viewBox="0 -8 200 25" fill="none" stroke="currentColor" strokeWidth="0.5">
           <g fill="white">
             <circle cx="3" cy="0" r="2" />
             <circle cx="6" cy="0" r="3" />
@@ -97,9 +97,39 @@ function App() {
             <circle cx="85.5" cy="-2" r="1.5" />
             <circle cx="88" cy="-2" r="1.5" />
             <circle cx="90" cy="-2" r="0.5" />
+          </g>
+          <g fill="white">
+            <circle cx="103" cy="0" r="2" />
+            <circle cx="106" cy="0" r="3" />
+            <circle cx="109" cy="0" r="3" />
+            <circle cx="112" cy="0" r="2" />
+          </g>
+          <g fill="white">
+            <circle cx="123" cy="2" r="1" />
+            <circle cx="126" cy="2" r="2" />
+            <circle cx="129" cy="2" r="2" />
+            <circle cx="132" cy="2" r="1" />
+          </g>
+          <g fill="white">
+            <circle cx="139" cy="-2" r="1.5" />
+            <circle cx="142" cy="-2" r="2.5" />
+            <circle cx="145" cy="-2" r="2.5" />
+            <circle cx="148" cy="-2" r="1.5" />
+          </g>
+          <g fill="white">
+            <circle cx="160" cy="0" r="1.5" />
+            <circle cx="163" cy="0" r="2.5" />
+            <circle cx="166" cy="0" r="2.5" />
+            <circle cx="169" cy="0" r="1.5" />
+          </g>
+          <g fill="white">
+            <circle cx="183.5" cy="-2" r="0.5" />
+            <circle cx="185.5" cy="-2" r="1.5" />
+            <circle cx="188" cy="-2" r="1.5" />
+            <circle cx="190" cy="-2" r="0.5" />
           </g>
         </svg>
-        <svg class={styles.cloudsInfScroll} xmlns="http://www.w3.org/2000/svg" viewBox="0 -8 100 25" fill="none" stroke="currentColor" strokeWidth="0.5">
+        <svg class={styles.cloudsInfScroll} xmlns="http://www.w3.org/2000/svg" viewBox="0 -8 200 25" fill="none" stroke="currentColor" strokeWidth="0.5">
           <g fill="white">
             <circle cx="3" cy="0" r="2" />
             <circle cx="6" cy="0" r="3" />
@@ -129,6 +159,36 @@ function App() {
             <circle cx="85.5" cy="-2" r="1.5" />
             <circle cx="88" cy="-2" r="1.5" />
             <circle cx="90" cy="-2" r="0.5" />
+          </g>
+          <g fill="white">
+            <circle cx="103" cy="0" r="2" />
+            <circle cx="106" cy="0" r="3" />
+            <circle cx="109" cy="0" r="3" />
+            <circle cx="112" cy="0" r="2" />
+          </g>
+          <g fill="white">
+            <circle cx="123" cy="2" r="1" />
+            <circle cx="126" cy="2" r="2" />
+            <circle cx="129" cy="2" r="2" />
+            <circle cx="132" cy="2" r="1" />
+          </g>
+          <g fill="white">
+            <circle cx="139" cy="-2" r="1.5" />
+            <circle cx="142" cy="-2" r="2.5" />
+            <circle cx="145" cy="-2" r="2.5" />
+            <circle cx="148" cy="-2" r="1.5" />
+          </g>
+          <g fill="white">
+            <circle cx="160" cy="0" r="1.5" />
+            <circle cx="163" cy="0" r="2.5" />
+            <circle cx="166" cy="0" r="2.5" />
+            <circle cx="169" cy="0" r="1.5" />
+          </g>
+          <g fill="white">
+            <circle cx="183.5" cy="-2" r="0.5" />
+            <circle cx="185.5" cy="-2" r="1.5" />
+            <circle cx="188" cy="-2" r="1.5" />
+            <circle cx="190" cy="-2" r="0.5" />
           </g>
         </svg>
       </div>
