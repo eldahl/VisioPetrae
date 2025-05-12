@@ -1,0 +1,60 @@
+@inference_registry_HostAddress = http://localhost:5142
+
+### Get all servers
+GET {{inference_registry_HostAddress}}/api/servers
+Accept: application/json
+
+### Get a specific server
+GET {{inference_registry_HostAddress}}/api/servers/1
+Accept: application/json
+
+### Register a new server
+POST {{inference_registry_HostAddress}}/api/servers
+Content-Type: application/json
+
+{
+  "id": 1,
+  "hostname": "inference-server-1",
+  "port": 8080,
+  "isAvailable": true,
+  "lastHeartbeat": "2023-09-10T12:00:00Z",
+  "activeTasks": 0,
+  "maxTasks": 5,
+  "status": "Online"
+}
+
+### Update a server
+PUT {{inference_registry_HostAddress}}/api/servers/1
+Content-Type: application/json
+
+{
+  "id": 1,
+  "hostname": "inference-server-1",
+  "port": 8080,
+  "isAvailable": true,
+  "lastHeartbeat": "2023-09-10T12:00:00Z",
+  "activeTasks": 2,
+  "maxTasks": 5,
+  "status": "Online"
+}
+
+### Update server status
+PUT {{inference_registry_HostAddress}}/api/servers/1/status
+Content-Type: application/json
+
+"Busy"
+
+### Get available server
+GET {{inference_registry_HostAddress}}/api/servers/available
+Accept: application/json
+
+### Increment active tasks
+POST {{inference_registry_HostAddress}}/api/servers/1/tasks/increment
+Content-Type: application/json
+
+### Decrement active tasks
+POST {{inference_registry_HostAddress}}/api/servers/1/tasks/decrement
+Content-Type: application/json
+
+### Remove a server
+DELETE {{inference_registry_HostAddress}}/api/servers/1
