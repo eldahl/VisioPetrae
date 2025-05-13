@@ -271,7 +271,8 @@ body {
     background-size: 320px;
     height: 320px;
   }
-  .welcomeContainer h1 {
+  
+  .welcomeTitle {
     font-size: 36px;
     margin-top: -150px;
   }
@@ -289,7 +290,7 @@ body {
     background-size: 360px;
     height: 360px;
   }
-  .welcomeContainer h1 {
+  .welcomeTitle {
     font-size: 40px;
     margin-top: -200px;
   }
@@ -303,7 +304,7 @@ body {
 }
 
 @media (min-width: 601px) and (max-width: 1200px) {
-  .welcomeContainer h1 {
+  .welcomeTitle {
     font-size: 55px;
   }
   .clouds, .cloudsInfScroll {
@@ -315,7 +316,7 @@ body {
   }
 }
 @media (min-width: 1201px) {
-  .welcomeContainer h1 {
+  .welcomeTitle {
     font-size: 55px;
   }
   .clouds, .cloudsInfScroll {
@@ -328,7 +329,7 @@ body {
 }
 
 @media (min-width: 1921px) {
-  .welcomeContainer h1 {
+  .welcomeTitle {
     font-size: 55px;
   }
   .clouds, .cloudsInfScroll {
