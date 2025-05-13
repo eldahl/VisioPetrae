@@ -274,7 +274,6 @@ body {
   
   .welcomeTitle {
     font-size: 36px;
-    margin-top: -150px;
   }
   .clouds, .cloudsInfScroll {
     margin-top: -100px;
@@ -292,7 +291,6 @@ body {
   }
   .welcomeTitle {
     font-size: 40px;
-    margin-top: -200px;
   }
   .clouds, .cloudsInfScroll {
     margin-top: -80px;
