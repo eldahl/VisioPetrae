@@ -65,8 +65,8 @@ function App() {
           </div>
         </nav>  
       </header>
+      <h1 class={styles.welcomeTitle}>What can Visio Petrae <br />do for you?</h1>
       <div class={styles.welcomeContainer}>
-        <h1>What can Visio Petrae <br />do for you?</h1>
         <svg class={styles.clouds} xmlns="http://www.w3.org/2000/svg" viewBox="0 -8 200 25" fill="none" stroke="currentColor" strokeWidth="0.5">
           <g fill="white">
             <circle cx="3" cy="0" r="2" />
