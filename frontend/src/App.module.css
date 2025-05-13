@@ -201,6 +201,7 @@ body {
 }
 
 .welcomeContainer {
+  margin-top: 100px;
   height: 520px;
   background: none;
   display: flex;
@@ -210,7 +211,6 @@ body {
   font-size: 2em;
   font-weight: bold;
   position: relative;
-  overflow: hidden;
   background-image: url('assets/vp-rock.png');
   background-size: 500px;
   background-position: center;
@@ -239,7 +239,8 @@ body {
 
 .welcomeContainer h1 {
   z-index: 1;
-  margin-top: -300px;
+  margin-top: -540px;
+
   font-size: 55px;
   color: white;
   text-shadow: -1px -1px 0 #555555, 1px -1px 0 #555555, -1px 1px 0 #555555, 1px 1px 0 #555555;
