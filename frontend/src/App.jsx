@@ -74,7 +74,7 @@ function App(props) {
             </div>
           </nav>  
         </header>
-        <props.children />
+        {props.children}
       </div>
   );
 }
