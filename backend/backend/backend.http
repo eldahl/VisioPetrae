@@ -1,3 +1,49 @@
 @backend_HostAddress = http://localhost:5069
 
+### Ping the profile service
+GET {{backend_HostAddress}}/api/profile/ping
+Accept: application/json
+
+### Get all profiles
+GET {{backend_HostAddress}}/api/profile
+Accept: application/json
+
+### Get a specific profile
+GET {{backend_HostAddress}}/api/profile/1
+Accept: application/json
+
+### Get profile by username
+GET {{backend_HostAddress}}/api/profile/username/johndoe
+Accept: application/json
+
+### Create a new profile
+POST {{backend_HostAddress}}/api/profile
+Content-Type: application/json
+
+{
+  "username": "johndoe",
+  "email": "john.doe@example.com",
+  "firstName": "John",
+  "lastName": "Doe",
+  "bio": "Software developer with a passion for clean code",
+  "avatarUrl": "https://example.com/avatar.jpg"
+}
+
+### Update a profile
+PUT {{backend_HostAddress}}/api/profile/1
+Content-Type: application/json
+
+{
+  "id": 1,
+  "username": "johndoe",
+  "email": "john.doe@example.com",
+  "firstName": "John",
+  "lastName": "Doe",
+  "bio": "Software developer and open source contributor",
+  "avatarUrl": "https://example.com/avatar.jpg"
+}
+
+### Delete a profile
+DELETE {{backend_HostAddress}}/api/profile/1
+
 ###

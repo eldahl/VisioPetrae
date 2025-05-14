@@ -1,3 +1,5 @@
+using backend.Services;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -6,6 +8,9 @@ builder.Services.AddOpenApi();
 
 // Add services for controllers
 builder.Services.AddControllers();
+
+// Register services
+builder.Services.AddSingleton<ProfileService>();
 
 var app = builder.Build();
 
