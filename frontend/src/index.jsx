@@ -10,6 +10,7 @@ import Home from './pages/Home';
 import Features from './pages/Features';
 import Pricing from './pages/Pricing';
 import Contact from './pages/Contact';
+import Inference from './pages/Inference';
 
 const root = document.getElementById('root');
 
@@ -25,4 +26,5 @@ render(() => (
   <Route path="/vp/features" component={() => <App><Features /></App>} />
   <Route path="/vp/pricing" component={() => <App><Pricing /></App>} />
   <Route path="/vp/contact" component={() => <App><Contact /></App>} />
+  <Route path="/vp/inference" component={() => <App><Inference /></App>} />
 </Router>), root);
