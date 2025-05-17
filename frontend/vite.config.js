@@ -6,7 +6,7 @@ export default defineConfig({
   plugins: [solidPlugin()],
   server: {
     port: 3000,
-    allowedHosts: ["vps.eldc.dk", "localhost", "127.0.0.1"],
+    allowedHosts: ["localhost", "127.0.0.1"],
   },
   build: {
     target: 'esnext',

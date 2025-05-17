@@ -39,8 +39,9 @@ function App(props) {
   });
 
   // Close menu when a link is clicked
-  const handleNavLinkClick = () => {
+  const handleNavLinkClick = (href) => {
     setIsNavMenuOpen(false);
+    window.location.href = href;
   };
 
   return (
@@ -51,10 +52,10 @@ function App(props) {
             <button class={styles.navMenuToggle} onClick={toggleNavMenu}>☰</button>
             <Show when={windowWidth() > 600 || isNavMenuOpen()}>
               <ul class={windowWidth() < 600 && isNavMenuOpen() ? styles.navDropdownMenu : styles.navList}>
-                <li><a href="/vp/" onClick={handleNavLinkClick}>Home</a></li>
-                <li><a href="/vp/features" onClick={handleNavLinkClick}>Features</a></li>
-                <li><a href="/vp/pricing" onClick={handleNavLinkClick}>Pricing</a></li>
-                <li><a href="/vp/contact" onClick={handleNavLinkClick}>Contact</a></li>
+                <li><a href="/vp/">Home</a></li>
+                <li><a href="/vp/features">Features</a></li>
+                <li><a href="/vp/pricing">Pricing</a></li>
+                <li><a href="/vp/contact">Contact</a></li>
               </ul>
             </Show>
             <div class={styles.navRightContainer}>

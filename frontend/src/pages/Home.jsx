@@ -3,7 +3,7 @@ import styles from '../App.module.css';
 export default function Home() {
   return (
     <>
-      <h1 class={styles.welcomeTitle}>What can Visio Petrae <br />do for you?</h1>
+      <h1 class={styles.welcomeTitle}>What can the<br />seeing rock do?</h1>
       <div class={styles.welcomeContainer}>
         <svg class={styles.clouds} xmlns="http://www.w3.org/2000/svg" viewBox="0 -8 200 25" fill="none" stroke="currentColor" strokeWidth="0.5">
           <g fill="white">

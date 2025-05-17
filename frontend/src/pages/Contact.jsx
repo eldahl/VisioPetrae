@@ -18,7 +18,6 @@ export default function Contact() {
     <>
     <div class={styles.pageContainer}>
       <h1>Contact Us</h1>
-      
       {!submitted() ? (
         <form class={styles.contactForm} onSubmit={handleSubmit}>
           <div class={styles.formGroup}>
@@ -67,15 +66,11 @@ export default function Contact() {
       <div class={styles.contactInfo}>
         <div>
           <h3>Email</h3>
-          <p>contact@visiopetrae.com</p>
-        </div>
-        <div>
-          <h3>Phone</h3>
-          <p>+1 (555) 123-4567</p>
+          <p>contact@seeingrock.com</p>
         </div>
         <div>
           <h3>Address</h3>
-          <p>123 AI Plaza, Tech District<br />San Francisco, CA 94103</p>
+          <p>123 AI Vænget<br />Sønderborg, 6400 Denmark</p>
         </div>
       </div>
     </div>

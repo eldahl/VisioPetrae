@@ -362,7 +362,6 @@ body {
 }
 
 .navDropdownMenu {
-  display: none;
   position: absolute;
   left: 10px;
   top: 60px;
@@ -400,8 +399,9 @@ body {
 }
 
 .pageContainer {
-  padding: 40px 20px;
+  padding: 5px 20px 20px 20px;
   max-width: 1200px;
+  width: 80%;
   margin: 0 auto;
 }
 
@@ -516,8 +516,7 @@ body {
 
 /* Contact page styles */
 .contactForm {
-  max-width: 600px;
-  margin: 30px auto;
+  margin: 0 auto;
 }
 
 .formGroup {
@@ -532,8 +531,9 @@ body {
 
 .formGroup input,
 .formGroup textarea {
+  max-width: 800px;
   width: 100%;
-  padding: 10px;
+  padding: 10px 0;
   border: 1px solid #ddd;
   border-radius: 5px;
   font-size: 16px;
@@ -546,24 +546,43 @@ body {
 
 .contactInfo {
   display: flex;
-  justify-content: space-around;
-  flex-wrap: wrap;
-  margin-top: 50px;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  margin-top: 20px;
 }
 
 .contactInfo div {
   text-align: center;
-  margin: 0 20px 20px;
+  margin: 0 20px;
 }
 
 .contactInfo h3 {
   color: #4b0082;
+  margin-top: 4px;
+  margin-bottom: 0;
+}
+
+.contactInfo p {
+  margin-top: 4px;
+}
+
+@media (min-width: 600px) {
+  .contactInfo {
+    flex-direction: row;
+  }
+}
+
+@media (max-width: 599px) {
+  .contactInfo {
+    flex-direction: column;
+  }
 }
 
 /* Responsive adjustments */
 @media (max-width: 768px) {
+
   .pricingContainer {
-    flex-direction: column;
     align-items: center;
   }
   
