@@ -44,4 +44,26 @@ public class ServersController : ControllerBase
         }
         return Conflict("A server with the same ID already exists");
     }
+
+    [HttpPut("{id}")]
+    public ActionResult<InferenceServer> UpdateServer(int id, InferenceServer server)
+    {
+        if (_registry.UpdateServer(server))
+        {
+            _logger.LogInformation("Updated server with ID: {ServerId}", server.Id);
+            return Ok(server);
+        }
+        return NotFound();
+    }
+
+    [HttpDelete("{id}")]
+    public ActionResult<InferenceServer> DeregisterServer(int id)
+    {
+        if (_registry.RemoveServer(id))
+        {
+            _logger.LogInformation("Deregistered server with ID: {ServerId}", id);
+            return Ok();
+        }
+        return NotFound();
+    }
 } 

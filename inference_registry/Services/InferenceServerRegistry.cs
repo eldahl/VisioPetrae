@@ -7,7 +7,7 @@ public class InferenceServerRegistry
 {
     private readonly ConcurrentDictionary<int, InferenceServer> _servers = new();
     
-    public IEnumerable<InferenceServer> GetAllServers()
+    public IEnumerable<KeyValuePair<int, InferenceServer>> GetAllServers()
     {
         return _servers;
     }

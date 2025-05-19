@@ -2,7 +2,18 @@ namespace inference_registry.Models;
 
 public class InferenceServer
 {
-    // Connection information
+    public InferenceServer(string hostname, int port) {
+        this.Uuid = Guid.NewGuid().ToString();
+        this.Hostname = hostname;
+        this.Port = port;
+        this.ActiveTasks = 0;
+        this.MaxTasks = 3;
+        this.Status = "Offline";
+        this.IsAvailable = false;
+    }
+
+    // Server information
+    public string Uuid { get; set; }
     public string Hostname { get; set; } = string.Empty;
     public int Port { get; set; }
 
@@ -16,12 +27,12 @@ public class InferenceServer
     public DateTime LastHeartbeat { get; set; }
 } 
 
-public class InferenceServerResponse {
-    public int Id { get; set; }
-    public string response;
+public class InferenceResponse {
+    public string uuid { get; set; }
+    public string response { get; set; } = "";
 }
 
-public class InferenceServerRequest {
-    public int Id { get; set; }
-    public string request;
+public class InferenceRequest {
+    public string uuid { get; set; }
+    public string request { get; set; } = "";
 }

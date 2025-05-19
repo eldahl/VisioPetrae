@@ -68,7 +68,7 @@ async def inferPage():
           formData.append('prompt', promptText);
 
           try {
-            const response = await fetch('http://vps.edc.lol:3000/infer', {
+            const response = await fetch('http://192.168.1.229:8000/infer', {
               method: 'POST',
               body: formData
             });
