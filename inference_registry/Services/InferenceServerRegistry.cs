@@ -9,7 +9,7 @@ public class InferenceServerRegistry
     
     public IEnumerable<KeyValuePair<int, InferenceServer>> GetAllServers()
     {
-        return _servers;
+        return _servers.Select(s => new KeyValuePair<int, InferenceServer>(s.Key, s.Value));
     }
     
     public InferenceServer? GetServer(int id)
