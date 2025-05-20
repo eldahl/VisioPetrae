@@ -38,5 +38,5 @@ jobs:
 
     - name: Move build artifacts to webserver on runner
       run: |
-        cd frontend
-        cp -r dist /var/www/html/vp/
+        cd frontend/dist/
+        cp -r . /var/www/html/vp/

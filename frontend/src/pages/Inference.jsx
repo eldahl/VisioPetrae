@@ -4,7 +4,7 @@ export default function Inference() {
   return (
     <>
       <div class={styles.pageContainer}>
-        <h1>Inference</h1>
+        <h1>Inference goes here</h1>
         <div class={styles.inferenceContainer}>
           {/* Empty inference page content will go here */}
         </div>
