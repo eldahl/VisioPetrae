@@ -2,11 +2,11 @@ name: Frontend Build and Test
 
 on:
   push:
-    branches: [ deploy ]
+    branches: [ deploy-frontend ]
     paths:
       - 'frontend/**'
   pull_request:
-    branches: [ deploy ]
+    branches: [ deploy-frontend ]
     paths:
       - 'frontend/**'
   workflow_dispatch:  # Allows manual triggering
