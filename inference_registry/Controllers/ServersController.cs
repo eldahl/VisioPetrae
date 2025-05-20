@@ -23,10 +23,10 @@ public class ServersController : ControllerBase
         return Ok(_registry.GetAllServers());
     }
 
-    [HttpGet("{id}")]
-    public ActionResult<InferenceServer> GetServer(int id)
+    [HttpGet("{uuid}")]
+    public ActionResult<InferenceServer> GetServer(string uuid)
     {
-        var server = _registry.GetServer(id);
+        var server = _registry.GetServer(uuid);
         if (server == null)
         {
             return NotFound();
@@ -39,29 +39,29 @@ public class ServersController : ControllerBase
     {
         if (_registry.AddServer(server))
         {
-            _logger.LogInformation("Registered new server with ID: {ServerId}", server.Id);
-            return CreatedAtAction(nameof(GetServer), new { id = server.Id }, server);
+            _logger.LogInformation("Registered new server with UUID: {Uuid}", server.Uuid);
+            return CreatedAtAction(nameof(GetServer), new { uuid = server.Uuid }, server);
         }
-        return Conflict("A server with the same ID already exists");
+        return Conflict("A server with the same UUID already exists");
     }
 
-    [HttpPut("{id}")]
-    public ActionResult<InferenceServer> UpdateServer(int id, InferenceServer server)
+    [HttpPut("{uuid}")]
+    public ActionResult<InferenceServer> UpdateServer(string uuid, InferenceServer server)
     {
         if (_registry.UpdateServer(server))
         {
-            _logger.LogInformation("Updated server with ID: {ServerId}", server.Id);
+            _logger.LogInformation("Updated server with UUID: {Uuid}", server.Uuid);
             return Ok(server);
         }
         return NotFound();
     }
 
-    [HttpDelete("{id}")]
-    public ActionResult<InferenceServer> DeregisterServer(int id)
+    [HttpDelete("{uuid}")]
+    public ActionResult<InferenceServer> DeregisterServer(string uuid)
     {
-        if (_registry.RemoveServer(id))
+        if (_registry.RemoveServer(uuid))
         {
-            _logger.LogInformation("Deregistered server with ID: {ServerId}", id);
+            _logger.LogInformation("Deregistered server with UUID: {Uuid}", uuid);
             return Ok();
         }
         return NotFound();
