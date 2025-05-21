@@ -63,8 +63,10 @@ jobs:
       run: |
         cd inference_server
         
+        conda activate ovis-env
+        
         echo "Python path: $(which python)"
         echo "Pip path: $(which pip)"
         pip list
         
-        tmux new-session -d -s inference_server "conda activate ovis-env && OVIS_MODEL=Ovis/models/Ovis2-8B-GPTQ-Int4 fastapi run infer.py > inference_server.log 2>&1"
+        tmux new-session -d -s inference_server "OVIS_MODEL=Ovis/models/Ovis2-8B-GPTQ-Int4 fastapi run infer.py > inference_server.log 2>&1"
