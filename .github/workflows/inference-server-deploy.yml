@@ -39,7 +39,7 @@ jobs:
         conda activate ovis-env
         
         #pip install --upgrade pip
-        #pip cache purge
+        pip cache purge
 
         # Install requirements for the project through pip
         #cd ..
@@ -51,9 +51,8 @@ jobs:
         pip install gptqmodel
         pip install numpy==1.25.0
         #pip install auto-gptq optimum
-        #pip install torch==2.4.0 transformers==4.49.0 pillow==11.2.1 flash-attn==2.7.0.post2 gptqmodel fastapi[standard] numpy==1.25.0
-        pip install gptqmodel --force-reinstall
-        
+        pip install datasets device_smi threadpoolctl tokenicer accelerate
+
         # Install fastapi
         pip install "fastapi[standard]"
 
