@@ -20,13 +20,46 @@ jobs:
       uses: actions/checkout@v4
       
     - name: Install dependencies and download model
-      shell: bash -l {0}
+      shell: bash -l {0} 
       run: |
         cd inference_server
-        chmod +x ovis-setup.sh
-        bash ovis-setup.sh
+        conda init
+        source /opt/anaconda/etc/profile.d/conda.sh
+
+        # Download Ovis repo
+        git clone https://github.com/AIDC-AI/Ovis.git
+        cd Ovis
+        
+        # Setup python virtual environment
+        conda create -n ovis-env python=3.10 -y
+        conda activate ovis-env
+
+        pip cache purge
+
+        # Install requirements for the project through pip
+        #pip install -r requirements.txt
+        #pip install -e .
+        pip install torch==2.4.0 transformers==4.49.0 pillow==10.3.0
+        pip install flash-attn==2.7.0.post2 --no-build-isolation
+        pip install gptqmodel
+        pip install numpy==1.25.0
+        #pip install auto-gptq optimum
+
+        # Download 8b-GPTQ-Int4 model files
+        mkdir models
+        cd models
+        git clone https://huggingface.co/AIDC-AI/Ovis2-8B-GPTQ-Int4
+        cd ..
+
+        # Install fastapi
+        pip install "fastapi[standard]"
+        
+        echo "Python path: $(which python)"
+        echo "Pip path: $(which pip)"
+        pip list
       
     - name: Start inference server
+      shell: bash -l {0} 
       run: |
         cd inference_server
         tmux new-session -d -s inference_server "conda activate ovis-env && OVIS_MODEL=Ovis/models/Ovis2-8B-GPTQ-Int4 fastapi run infer.py > inference_server.log 2>&1"
