@@ -24,7 +24,8 @@ jobs:
       run: |
         cd inference_server
         conda init
-        source /opt/anaconda/etc/profile.d/conda.sh
+        #source /opt/anaconda/etc/profile.d/conda.sh
+        eval "$(conda shell.bash hook)"
 
         # Download Ovis repo
         git clone https://github.com/AIDC-AI/Ovis.git
@@ -62,7 +63,8 @@ jobs:
       shell: bash -l {0} 
       run: |
         cd inference_server
-        
+       
+        eval "$(conda shell.bash hook)" 
         conda activate ovis-env
         
         echo "Python path: $(which python)"
