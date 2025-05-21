@@ -35,7 +35,8 @@ jobs:
         # Setup python virtual environment
         conda create -n ovis-env python=3.10 -y
         conda activate ovis-env
-
+        
+        pip install --upgrade pip
         pip cache purge
 
         # Install requirements for the project through pip
