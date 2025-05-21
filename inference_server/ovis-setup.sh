@@ -1,17 +1,17 @@
 #/bin/bash!
 # Conda context for the shell script
-#conda init
-#source ~/.bashrc
+conda init
+source ~/.bashrc
 #source /opt/anaconda/etc/profile.d/conda.sh
 
 # Download Ovis repo
 git clone https://github.com/AIDC-AI/Ovis.git
 cd Ovis
 # Setup python virtual environment
-#conda create -n ovis-env python=3.10 -y
-#conda activate ovis-env
+conda create -n ovis-env python=3.10 -y
+conda activate ovis-env
 
-#pip cache purge
+pip cache purge
 
 # Install requirements for the project through pip
 #pip install -r requirements.txt
