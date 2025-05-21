@@ -51,7 +51,7 @@ jobs:
         pip install gptqmodel
         pip install numpy==1.25.0
         #pip install auto-gptq optimum
-        pip install datasets device_smi threadpoolctl tokenicer accelerate
+        pip install datasets logbar device_smi threadpoolctl tokenicer accelerate
 
         # Install fastapi
         pip install "fastapi[standard]"
