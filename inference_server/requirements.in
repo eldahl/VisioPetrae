@@ -1,0 +1,8 @@
+# requirements.in
+torch==2.4.0
+flash-attn==2.7.0.post2
+gptqmodel
+transformers==4.49.0
+pillow==11.2.1
+fastapi[standard]
+numpy==1.25.0
