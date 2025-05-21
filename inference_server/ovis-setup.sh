@@ -1,8 +1,8 @@
 #/bin/bash!
 # Conda context for the shell script
 conda init
-source ~/.bashrc
-#source /opt/anaconda/etc/profile.d/conda.sh
+#source ~/.bashrc
+source /opt/anaconda/etc/profile.d/conda.sh
 
 # Download Ovis repo
 git clone https://github.com/AIDC-AI/Ovis.git
