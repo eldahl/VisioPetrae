@@ -22,6 +22,7 @@ jobs:
     - name: Install dependencies and download model
       shell: bash -l {0} 
       run: |
+        export PIP_NO_BUILD_ISOLATION=1
         cd inference_server
         conda init
         #source /opt/anaconda/etc/profile.d/conda.sh
