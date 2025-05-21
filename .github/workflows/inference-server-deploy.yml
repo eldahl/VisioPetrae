@@ -24,6 +24,7 @@ jobs:
       env:
         PIP_NO_BUILD_ISOLATION: 1
       run: |
+        set -euo pipefail
         cd inference_server
         conda init
         #source /opt/anaconda/etc/profile.d/conda.sh
@@ -44,7 +45,8 @@ jobs:
         #cd ..
         #~/.conda/envs/ovis-env/bin/pip install -r requirements.in
         #pip install -e .
-        pip install torch==2.4.0 transformers==4.49.0 pillow==10.3.0
+        pip install torch==2.4.0
+        pip install transformers==4.49.0 pillow==10.3.0
         pip install flash-attn==2.7.0.post2 --no-build-isolation
         pip install gptqmodel
         pip install numpy==1.25.0
@@ -54,6 +56,8 @@ jobs:
         
         # Install fastapi
         pip install "fastapi[standard]"
+
+        pip check
 
         # Download 8b-GPTQ-Int4 model files
         cd Ovis
