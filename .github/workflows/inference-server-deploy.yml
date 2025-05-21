@@ -33,6 +33,7 @@ jobs:
         cd Ovis
         
         # Setup python virtual environment
+        conda env remove -n ovis-env
         conda create -n ovis-env python=3.10 -y
         conda activate ovis-env
         
