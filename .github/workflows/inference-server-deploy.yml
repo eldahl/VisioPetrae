@@ -20,6 +20,7 @@ jobs:
       uses: actions/checkout@v4
       
     - name: Install dependencies and download model
+      shell: bash -l {0}
       run: |
         cd inference_server
         chmod +x ovis-setup.sh
