@@ -31,7 +31,6 @@ jobs:
 
         # Download Ovis repo
         git clone https://github.com/AIDC-AI/Ovis.git
-        cd Ovis
         
         # Setup python virtual environment
         conda env remove -n ovis-env -y
@@ -42,18 +41,19 @@ jobs:
         #pip cache purge
 
         # Install requirements for the project through pip
-        cd ..
-        ~/.conda/envs/ovis-env/bin/pip install -r requirements.in
+        #cd ..
+        #~/.conda/envs/ovis-env/bin/pip install -r requirements.in
         #pip install -e .
-        #pip install torch==2.4.0 transformers==4.49.0 pillow==10.3.0 --no-build-isolation --no-cache-dir
-        #pip install flash-attn==2.7.0.post2 --no-build-isolation --no-cache-dir
-        #pip install gptqmodel --force-reinstall --no-build-isolation --no-cache-dir
-        #pip install numpy==1.25.0 --no-build-isolation --no-cache-dir
+        pip install torch==2.4.0
+        pip install transformers==4.49.0 pillow==10.3.0 --no-build-isolation --no-cache-dir
+        pip install flash-attn==2.7.0.post2 --no-build-isolation --no-cache-dir
+        pip install gptqmodel --no-cache-dir
+        pip install numpy==1.25.0 --no-build-isolation --no-cache-dir
         #pip install auto-gptq optimum
         #pip install torch==2.4.0 transformers==4.49.0 pillow==11.2.1 flash-attn==2.7.0.post2 gptqmodel fastapi[standard] numpy==1.25.0
         
         # Install fastapi
-        #pip install "fastapi[standard]"
+        pip install "fastapi[standard]"
 
         # Download 8b-GPTQ-Int4 model files
         cd Ovis
