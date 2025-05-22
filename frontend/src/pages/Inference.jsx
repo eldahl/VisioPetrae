@@ -16,7 +16,7 @@ export default function Inference() {
     formData.append('prompt', promptText);
 
     try {
-      const response = await fetch('http://vps.eldc.dk:8000/infer', {
+      const response = await fetch('http://vps.eldc.dk/api/infer', {
         method: 'POST',
         body: formData
       });
