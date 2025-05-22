@@ -595,3 +595,18 @@ body {
     order: -1;
   }
 }
+
+.inferenceContainer {
+  font-family: sans-serif;
+  max-width: 500px;
+  margin: 2rem auto;
+}
+
+.inferenceContainer label,
+.inferenceContainer input,
+.inferenceContainer textarea,
+.inferenceContainer button {
+  display: block;
+  width: 100%;
+  margin-bottom: 1rem;
+}
