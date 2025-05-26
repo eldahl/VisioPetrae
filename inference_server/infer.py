@@ -8,6 +8,10 @@ from fastapi import FastAPI, UploadFile, Form, File
 from fastapi.responses import HTMLResponse, PlainTextResponse
 from fastapi.middleware.cors import CORSMiddleware
 
+from contextlib import asynccontextmanager
+
+import requests
+
 app = FastAPI()
 app.add_middleware(
     CORSMiddleware,
@@ -19,6 +23,26 @@ app.add_middleware(
 
 UPLOAD_DIR = "uploads"
 os.makedirs(UPLOAD_DIR, exist_ok=True)
+
+REGISTRY_URL = os.environ['REGISTRY_URL']
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # Send registration request to registry
+    response = requests.post(f"{REGISTRY_URL}/Registry", json={{
+      "Hostname": "localhost",
+      "Port": 8000,
+      "MaxTasks": 5,
+      "IsAvailable": True,
+      "Status": "Online"
+    }})
+    print("Registration response: " + str(response.status_code))
+    print(response.json())
+    uuid = response.json.__dict__.get("uuid")
+    yield
+    # Deregister from registry
+    response = requests.delete(f"{REGISTRY_URL}/Registry/{uuid}")
+    print("Deregistration response: " + str(response.status_code))
 
 @app.get("/", response_class=HTMLResponse)
 async def inferPage():
@@ -83,6 +107,10 @@ async def inferPage():
     </body>
     </html>
     """
+
+@app.get("/heartbeat", response_class=PlainTextResponse)
+async def heartbeat():
+    return "OK"
 
 @app.post("/infer", response_class=PlainTextResponse)
 async def infer(image: UploadFile = File(...), prompt: str = Form(...)):
