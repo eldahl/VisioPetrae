@@ -1,0 +1,38 @@
+name: Deploy Inference Registry
+
+on:
+  push:
+    branches: [ deploy-inference-registry ]
+    paths:
+      - 'inference_registry/**'
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: node
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: '9.0.x'
+    
+    - name: Restore dependencies
+      run: dotnet restore inference_registry/inference_registry.csproj
+    
+    - name: Run tests
+      run: dotnet test inference_registry.Tests/inference_registry.Tests.csproj
+
+    - name: Build
+      run: dotnet build inference_registry/inference_registry.csproj --no-restore
+    
+    - name: Publish
+      run: dotnet publish inference_registry/inference_registry.csproj -c Release -o inference_registry/publish/ -r linux-x64 --self-contained true
+    
+    - name: Start Service with tmux
+      run: |
+        cd inference_registry/publish/
+        tmux kill-session -t inference_registry
+        tmux new-session -d -s inference_registry './inference_registry'

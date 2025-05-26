@@ -1,4 +1,5 @@
 
+using System.Diagnostics;
 using inference_registry.Models;
 using inference_registry.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -18,12 +19,14 @@ public class RequestController : ControllerBase
         _logger = logger;
     }
 
-    [HttpPost]
-    public ActionResult<InferenceRequest> RequestInference(InferenceRequest request)
-    {
+    [HttpPost("inferRequest")]
+    public async Task<ActionResult<InferenceResponse>> RequestInference(InferenceRequest request)
+    {     
+        // TODO: Add fault tolerance logic
         var server = _registry.GetAvailableServer();
-        server == null ? return StatusCode(503, "No available servers") : {
-            InferenceResponse res = server.RequestInference(request);
+        if(server == null) { return StatusCode(503, "No available servers"); } else {
+            _logger.LogInformation("Requesting inference from server: {server}\nprompt: {request}\nimage name: {image}", server.Uuid, request.prompt, request.image.FileName);
+            InferenceResponse res = await server.RequestInference(request);
             return Ok(res);
         };
     }

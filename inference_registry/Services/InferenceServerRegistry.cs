@@ -5,69 +5,74 @@ namespace inference_registry.Services;
 
 public class InferenceServerRegistry
 {
-    private readonly ConcurrentDictionary<int, InferenceServer> _servers = new();
+    private readonly ConcurrentDictionary<string, InferenceServer> _servers = new();
     
-    public IEnumerable<KeyValuePair<int, InferenceServer>> GetAllServers()
+    public IEnumerable<KeyValuePair<string, InferenceServer>> GetAllServers()
     {
-        return _servers.Select(s => new KeyValuePair<int, InferenceServer>(s.Key, s.Value));
+        return _servers.Select(s => new KeyValuePair<string, InferenceServer>(s.Key, s.Value));
     }
     
-    public InferenceServer? GetServer(int id)
+    public InferenceServer? GetServer(string uuid)
     {
-        _servers.TryGetValue(id, out var server);
+        _servers.TryGetValue(uuid, out var server);
         return server;
     }
     
     public bool AddServer(InferenceServer server)
     {
-        return _servers.TryAdd(server.Id, server);
+        // Check if the server is already registered
+        return _servers.Values.Any(s => s.Hostname == server.Hostname) ? false : _servers.TryAdd(server.Uuid, server);
     }
     
     public bool UpdateServer(InferenceServer server)
     {
-        return _servers.TryUpdate(server.Id, server, _servers[server.Id]);
+        if (_servers.TryGetValue(server.Uuid, out var existingServer))
+        {
+            return _servers.TryUpdate(server.Uuid, server, existingServer);
+        }
+        return false;
     }
     
-    public bool RemoveServer(int id)
+    public bool RemoveServer(string uuid)
     {
-        return _servers.TryRemove(id, out _);
+        return _servers.TryRemove(uuid, out _);
     }
     
-    public int GetAvailableServerId()
+    public InferenceServer? GetAvailableServer()
     {
         var availableServer = _servers.Values
             .Where(s => s.IsAvailable && s.ActiveTasks < s.MaxTasks)
             .OrderBy(s => s.ActiveTasks)
             .FirstOrDefault();
             
-        return availableServer?.Id ?? -1;
+        return availableServer;
     }
     
-    public void UpdateServerStatus(int id, string status)
+    public void UpdateServerStatus(string uuid, string status)
     {
-        if (_servers.TryGetValue(id, out var server))
+        if (_servers.TryGetValue(uuid, out var server))
         {
             server.Status = status;
             server.LastHeartbeat = DateTime.UtcNow;
-            _servers[id] = server;
+            _servers[uuid] = server;
         }
     }
     
-    public void IncrementActiveTasks(int id)
+    public void IncrementActiveTasks(string uuid)
     {
-        if (_servers.TryGetValue(id, out var server))
+        if (_servers.TryGetValue(uuid, out var server))
         {
             server.ActiveTasks++;
-            _servers[id] = server;
+            _servers[uuid] = server;
         }
     }
     
-    public void DecrementActiveTasks(int id)
+    public void DecrementActiveTasks(string uuid)
     {
-        if (_servers.TryGetValue(id, out var server) && server.ActiveTasks > 0)
+        if (_servers.TryGetValue(uuid, out var server) && server.ActiveTasks > 0)
         {
             server.ActiveTasks--;
-            _servers[id] = server;
+            _servers[uuid] = server;
         }
     }
 } 

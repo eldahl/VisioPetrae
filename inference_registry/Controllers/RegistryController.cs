@@ -5,13 +5,13 @@ using Microsoft.AspNetCore.Mvc;
 namespace inference_registry.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
-public class ServersController : ControllerBase
+[Route("[controller]")]
+public class RegistryController : ControllerBase
 {
     private readonly InferenceServerRegistry _registry;
-    private readonly ILogger<ServersController> _logger;
+    private readonly ILogger<RegistryController> _logger;
 
-    public ServersController(InferenceServerRegistry registry, ILogger<ServersController> logger)
+    public RegistryController(InferenceServerRegistry registry, ILogger<RegistryController> logger)
     {
         _registry = registry;
         _logger = logger;
@@ -35,8 +35,9 @@ public class ServersController : ControllerBase
     }
 
     [HttpPost]
-    public ActionResult<InferenceServer> RegisterServer(InferenceServer server)
+    public ActionResult<InferenceServer> RegisterServer(InferenceServerDTO serverDTO)
     {
+        var server = new InferenceServer(serverDTO);
         if (_registry.AddServer(server))
         {
             _logger.LogInformation("Registered new server with UUID: {Uuid}", server.Uuid);
@@ -46,8 +47,9 @@ public class ServersController : ControllerBase
     }
 
     [HttpPut("{uuid}")]
-    public ActionResult<InferenceServer> UpdateServer(string uuid, InferenceServer server)
+    public ActionResult<InferenceServer> UpdateServer(string uuid, InferenceServerDTO serverDTO)
     {
+        var server = new InferenceServer(uuid, serverDTO);
         if (_registry.UpdateServer(server))
         {
             _logger.LogInformation("Updated server with UUID: {Uuid}", server.Uuid);

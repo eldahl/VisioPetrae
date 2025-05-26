@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Image + Prompt Upload</title>
+    <style>
+    body {
+        font-family: sans-serif;
+        max-width: 500px;
+        margin: 2rem auto;
+    }
+    label, input, textarea, button {
+        display: block;
+        width: 100%;
+        margin-bottom: 1rem;
+    }
+    </style>
+</head>
+<body>
+    <h2>Upload Image with Prompt</h2>
+    <form id="uploadForm">
+    <label for="image">Choose an image:</label>
+    <input type="file" id="image" name="image" accept="image/*" required>
+
+    <label for="prompt">Enter prompt:</label>
+    <textarea id="prompt" name="prompt" rows="4" required></textarea>
+
+    <button type="submit">Send to Server</button>
+    </form>
+
+    <div id="response"></div>
+
+    <script>
+    document.getElementById('uploadForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const form = e.target;
+        const formData = new FormData();
+        const imageFile = form.image.files[0];
+        const promptText = form.prompt.value;
+
+        formData.append('image', imageFile);
+        formData.append('prompt', promptText);
+
+        try {
+        const response = await fetch('http://localhost:8100/Request/inferRequest', {
+            method: 'POST',
+            body: formData
+        });
+
+        const result = await response.text();
+        document.getElementById('response').innerText = result;
+        } catch (error) {
+        document.getElementById('response').innerText = 'Error: ' + error.message;
+        }
+    });
+    </script>
+</body>
+</html>
