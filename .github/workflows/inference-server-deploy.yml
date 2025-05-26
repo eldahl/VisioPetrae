@@ -81,4 +81,4 @@ jobs:
         echo "Pip path: $(which pip)"
         pip list
         
-        tmux new-session -d -s inference_server "REGISTRY_URL=http://vps.eldc.dk:8100 OVIS_MODEL=Ovis/models/Ovis2-8B-GPTQ-Int4 fastapi run infer.py > inference_server.log 2>&1"
+        tmux new-session -d -s inference_server "REGISTRY_URL=http://vps.eldc.dk:8100 OVIS_MODEL=Ovis/models/Ovis2-8B-GPTQ-Int4 fastapi run infer.py > inference_server.log"

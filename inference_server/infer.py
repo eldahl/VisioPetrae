@@ -12,14 +12,6 @@ from contextlib import asynccontextmanager
 
 import requests
 
-app = FastAPI()
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],  # Or specify ["http://localhost:5500"] or your frontend URL
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
 
 UPLOAD_DIR = "uploads"
 os.makedirs(UPLOAD_DIR, exist_ok=True)
@@ -29,20 +21,30 @@ REGISTRY_URL = os.environ['REGISTRY_URL']
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # Send registration request to registry
-    response = requests.post(f"{REGISTRY_URL}/Registry", json={{
+    response = requests.post(f"{REGISTRY_URL}/Registry", json={
       "Hostname": "localhost",
       "Port": 8000,
       "MaxTasks": 5,
       "IsAvailable": True,
       "Status": "Online"
-    }})
+    })
     print("Registration response: " + str(response.status_code))
     print(response.json())
-    uuid = response.json.__dict__.get("uuid")
+    json = response.json()
+    uuid = json.get("uuid")
     yield
     # Deregister from registry
     response = requests.delete(f"{REGISTRY_URL}/Registry/{uuid}")
     print("Deregistration response: " + str(response.status_code))
+
+app = FastAPI(lifespan=lifespan)
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Or specify ["http://localhost:5500"] or your frontend URL
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 @app.get("/", response_class=HTMLResponse)
 async def inferPage():
