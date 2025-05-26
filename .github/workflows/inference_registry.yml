@@ -34,5 +34,10 @@ jobs:
     - name: Start Service with tmux
       run: |
         cd inference_registry/publish/
-        tmux kill-session -t inference_registry 2>/dev/null
-        tmux new-session -d -s inference_registry './inference_registry'
+        #tmux kill-session -t inference_registry 2>/dev/null
+        #tmux new-session -d -s inference_registry './inference_registry'
+        SESSION_NAME=inference_registry
+        if tmux has-session -t "$SESSION_NAME" 2>/dev/null; then
+          tmux kill-session -t "$SESSION_NAME"
+        fi
+        tmux new-session -d -s "$SESSION_NAME" './inference_registry'
