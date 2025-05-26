@@ -1,5 +1,6 @@
 namespace inference_registry.Models;
 using System.Net.Http.Headers;
+using System.Threading;
 
 public class InferenceServerDTO {
     public string Hostname { get; set; } = string.Empty;
@@ -60,6 +61,39 @@ public class InferenceServer
             response = await response.Content.ReadAsStringAsync()
         };
         return resp;
+    }
+
+    public virtual async Task StartPeriodicHeartbeat(TimeSpan interval, Func<Task<bool>> heartbeat, Action<string>? onStatusUpdate = null)
+    {
+        while (true)
+        {
+            try
+            {
+                var isAlive = await heartbeat();
+                if (isAlive)
+                {
+                    this.Status = "Online";
+                    this.IsAvailable = this.ActiveTasks < this.MaxTasks;
+                }
+                else
+                {
+                    this.Status = "Offline";
+                    this.IsAvailable = false;
+                }
+                this.LastHeartbeat = DateTime.UtcNow;
+                onStatusUpdate?.Invoke(this.Status);
+            }
+            catch (Exception)
+            {
+                this.Status = "Offline";
+                this.IsAvailable = false;
+                this.LastHeartbeat = DateTime.UtcNow;
+                onStatusUpdate?.Invoke(this.Status);
+                break;
+            }
+
+            await Task.Delay(interval);
+        }
     }
 } 
 

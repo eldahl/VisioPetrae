@@ -47,7 +47,6 @@ public class RequestControllerTests
     public async Task RequestInference_WhenServerAvailable_ReturnsInferenceResponse()
     {
         // Arrange
-
         var dto = new InferenceServerDTO 
         { 
             Hostname = "host1", 

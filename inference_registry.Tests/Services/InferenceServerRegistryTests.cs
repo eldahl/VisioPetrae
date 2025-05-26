@@ -4,6 +4,8 @@ using System.Linq;
 using System.Collections.Generic;
 using inference_registry.Services;
 using inference_registry.Models;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace inference_registry.Tests.Services;
 
@@ -218,12 +220,13 @@ public class InferenceServerRegistryTests
     }
 
     [Fact]
-    public void UpdateServerStatus_WhenServerExists_UpdatesStatus()
+    public void UpdateServerStatus_WhenServerExists_UpdatesStatusAndHeartbeat()
     {
         // Arrange
         var dto = new InferenceServerDTO { Hostname = "host0", Port = 8000, Status = "Offline" };
         var server = new InferenceServer(dto);
         _registry.AddServer(server);
+        var initialHeartbeat = server.LastHeartbeat;
 
         // Act
         _registry.UpdateServerStatus(server.Uuid, "Online");
@@ -232,7 +235,7 @@ public class InferenceServerRegistryTests
         var updatedServer = _registry.GetServer(server.Uuid);
         Assert.NotNull(updatedServer);
         Assert.Equal("Online", updatedServer!.Status);
-        Assert.True((DateTime.UtcNow - updatedServer.LastHeartbeat).TotalSeconds >= 0);
+        Assert.True(updatedServer.LastHeartbeat > initialHeartbeat);
     }
 
     [Fact]
@@ -244,11 +247,52 @@ public class InferenceServerRegistryTests
     }
 
     [Fact]
-    public void IncrementActiveTasks_WhenServerExists_IncrementsTasks()
+    public void UpdateServerStatus_UpdatesLastHeartbeatToCurrentTime()
     {
         // Arrange
         var dto = new InferenceServerDTO { Hostname = "host0", Port = 8000, Status = "Offline" };
         var server = new InferenceServer(dto);
+        _registry.AddServer(server);
+        var initialHeartbeat = server.LastHeartbeat;
+
+        // Act
+        _registry.UpdateServerStatus(server.Uuid, "Online");
+
+        // Assert
+        var updatedServer = _registry.GetServer(server.Uuid);
+        Assert.NotNull(updatedServer);
+        Assert.True(updatedServer!.LastHeartbeat > initialHeartbeat);
+    }
+
+    [Fact]
+    public void UpdateServerStatus_MultipleUpdates_UpdatesHeartbeatEachTime()
+    {
+        // Arrange
+        var dto = new InferenceServerDTO { Hostname = "host0", Port = 8000, Status = "Offline" };
+        var server = new InferenceServer(dto);
+        _registry.AddServer(server);
+        var initialHeartbeat = server.LastHeartbeat;
+
+        // Act
+        _registry.UpdateServerStatus(server.Uuid, "Online");
+        var firstUpdateHeartbeat = _registry.GetServer(server.Uuid)!.LastHeartbeat;
+        Thread.Sleep(100); // Ensure some time passes
+        _registry.UpdateServerStatus(server.Uuid, "Busy");
+        var secondUpdateHeartbeat = _registry.GetServer(server.Uuid)!.LastHeartbeat;
+
+        // Assert
+        Assert.True(firstUpdateHeartbeat > initialHeartbeat);
+        Assert.True(secondUpdateHeartbeat > firstUpdateHeartbeat);
+    }
+
+    [Fact]
+    public void IncrementActiveTasks_WhenServerExists_IncrementsTasks()
+    {
+        // Arrange
+        var dto = new InferenceServerDTO { Hostname = "host0", Port = 8000, Status = "Online" };
+        var server = new InferenceServer(dto);
+        server.ActiveTasks = 0;
+        server.MaxTasks = 2;
         _registry.AddServer(server);
 
         // Act
@@ -264,10 +308,11 @@ public class InferenceServerRegistryTests
     public void DecrementActiveTasks_WhenServerExistsAndTasksGreaterThanZero_DecrementsTasks()
     {
         // Arrange
-        var dto = new InferenceServerDTO { Hostname = "host0", Port = 8000, Status = "Offline" };
+        var dto = new InferenceServerDTO { Hostname = "host0", Port = 8000, Status = "Online" };
         var server = new InferenceServer(dto);
+        server.ActiveTasks = 1;
+        server.MaxTasks = 2;
         _registry.AddServer(server);
-        _registry.IncrementActiveTasks(server.Uuid);
 
         // Act
         _registry.DecrementActiveTasks(server.Uuid);
@@ -282,8 +327,10 @@ public class InferenceServerRegistryTests
     public void DecrementActiveTasks_WhenServerExistsAndTasksZero_DoesNotDecrement()
     {
         // Arrange
-        var dto = new InferenceServerDTO { Hostname = "host0", Port = 8000, Status = "Offline" };
+        var dto = new InferenceServerDTO { Hostname = "host0", Port = 8000, Status = "Online" };
         var server = new InferenceServer(dto);
+        server.ActiveTasks = 0;
+        server.MaxTasks = 2;
         _registry.AddServer(server);
 
         // Act

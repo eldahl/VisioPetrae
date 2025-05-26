@@ -21,7 +21,23 @@ public class InferenceServerRegistry
     public bool AddServer(InferenceServer server)
     {
         // Check if the server is already registered
-        return _servers.Values.Any(s => s.Hostname == server.Hostname) ? false : _servers.TryAdd(server.Uuid, server);
+        if(_servers.Values.Any(s => s.Hostname == server.Hostname))
+            return false;
+
+        // Add the server to the registry
+        if(_servers.TryAdd(server.Uuid, server)){
+            // Start the server's heartbeat
+            Task.Run(async () => await server.StartPeriodicHeartbeat(TimeSpan.FromSeconds(2), async () => {
+                HttpClient client = new HttpClient();
+                client.BaseAddress = new Uri($"http://{server.Hostname}:{server.Port}");
+
+                var response = await client.GetAsync("/heartbeat");
+                return response.IsSuccessStatusCode;
+            }));
+            return true;
+        }
+
+        return false;
     }
     
     public bool UpdateServer(InferenceServer server)
