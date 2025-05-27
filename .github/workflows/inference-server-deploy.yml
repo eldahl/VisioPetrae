@@ -80,5 +80,8 @@ jobs:
         echo "Python path: $(which python)"
         echo "Pip path: $(which pip)"
         pip list
-        
-        tmux new-session -d -s inference_server "REGISTRY_URL=http://vps.eldc.dk:8100 OVIS_MODEL=Ovis/models/Ovis2-8B-GPTQ-Int4 fastapi run infer.py > inference_server.log"
+        SESSION_NAME=inference_server
+        if tmux has-session -t "$SESSION_NAME" 2>/dev/null; then
+          tmux kill-session -t "$SESSION_NAME"
+        fi
+        tmux new-session -d -s "$SESSION_NAME" "REGISTRY_URL=http://vps.eldc.dk:8100 OVIS_MODEL=Ovis/models/Ovis2-8B-GPTQ-Int4 fastapi run infer.py > inference_server.log"

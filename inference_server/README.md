@@ -13,7 +13,7 @@ chmod +x ovis-setup.sh
 Run inference server with:
 ```
 conda activate ovis-env
-OVIS_MODEL=Ovis/models/Ovis2-8B-GPTQ-Int4 fastapi run infer.py
+REGISTRY_URL=[Host:Port] OVIS_MODEL=Ovis/models/Ovis2-8B-GPTQ-Int4 fastapi run infer.py > inference_server.log
 ```
 
 # Credits/License
