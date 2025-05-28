@@ -13,18 +13,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="../../inference_registry/inference_registry.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="../../inference_registry/appsettings.json">
-      <CopyToPublishDirectory>Never</CopyToPublishDirectory>
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </None>
-    <None Include="../../inference_registry/appsettings.Development.json">
-      <CopyToPublishDirectory>Never</CopyToPublishDirectory>
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </None>
+    <ProjectReference Include="../../inference_registry/inference_registry.csproj">
+       <PrivateAssets>all</PrivateAssets>
+    </ProjectReference>
   </ItemGroup>
 
 </Project>
