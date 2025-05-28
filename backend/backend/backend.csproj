@@ -17,8 +17,14 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="../../inference_registry/appsettings.json" CopyToPublishDirectory="Never" />
-    <Content Include="../../inference_registry/appsettings.Development.json" CopyToPublishDirectory="Never" />
+    <None Include="../../inference_registry/appsettings.json">
+      <CopyToPublishDirectory>Never</CopyToPublishDirectory>
+      <CopyToOuputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="../../inference_registry/appsettings.Development.json">
+      <CopyToPublishDirectory>Never</CopyToPublishDirectory>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>
