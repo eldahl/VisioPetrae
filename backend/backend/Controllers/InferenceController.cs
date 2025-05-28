@@ -20,9 +20,9 @@ namespace VPBackend_Controllers
             _configuration = configuration;
         }
 
-        [HttpPost("request_inference_job/{uuid}")]
+        [HttpPost("request_inference_job")]
         [Authorize]
-        public async Task<IActionResult> RequestInferenceJob(string uuid, InferenceRequest job)
+        public async Task<IActionResult> RequestInferenceJob(InferenceRequest job)
         {
             HttpClient client = new HttpClient();
             client.BaseAddress = new Uri(_configuration["REGISTRY_URL"] ?? throw new Exception("REGISTRY_URL is not set"));
@@ -31,6 +31,9 @@ namespace VPBackend_Controllers
             if (response.IsSuccessStatusCode)
             {
                 var res = JsonSerializer.Deserialize<InferenceResponse>(await response.Content.ReadAsStringAsync());
+                if(res is null)
+                    return StatusCode(500, "Failed to deserialize inference response.");
+                
                 _logger.LogInformation("Inference job completed. dialog_uuid: {dialog_uuid}, server_uuid: {server_uuid}, response: {response}", res.dialog_uuid, res.server_uuid, res.response);
                 return Ok(res.response);
             }
