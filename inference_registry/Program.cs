@@ -23,6 +23,9 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
 }
 
+// Heartbeat
+app.MapGet("/heartbeat", () => "ok");
+
 // CORS
 app.UseCors(builder => builder
     .AllowAnyOrigin()

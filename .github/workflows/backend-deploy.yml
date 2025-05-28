@@ -1,0 +1,41 @@
+name: Deploy Backend
+
+on:
+  push:
+    branches: [ deploy-backend ]
+    paths:
+      - 'backend/backend/**'
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: node
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.x'
+
+      - name: Restore dependencies
+        run: dotnet restore backend/backend/backend.csproj
+
+      - name: Run tests
+        run: dotnet test backend/backend.Tests/backend.Tests.csproj
+
+      - name: Build
+        run: dotnet build backend/backend/backend.csproj --no-restore
+
+      - name: Publish
+        run: dotnet publish backend/backend/backend.csproj -c Release -o backend/backend/publish/ -r linux-x64 --self-contained true
+
+      - name: Start Service with tmux
+        run: |
+          cd backend/backend/publish/
+          SESSION_NAME=web-backend
+          if tmux has-session -t "$SESSION_NAME" 2>/dev/null; then
+            tmux kill-session -t "$SESSION_NAME"
+          fi
+          tmux new-session -d -s "$SESSION_NAME" './backend'

@@ -1,0 +1,29 @@
+using System.Diagnostics;
+using System.Linq.Expressions;
+using MongoDB.Bson;
+using MongoDB.Driver;
+using Microsoft.Extensions.Configuration;
+
+namespace backend;
+
+public interface IMongoDBContext
+{
+    IMongoCollection<T> Collection<T>() where T : class;
+}
+
+public class MongoDBContext : IMongoDBContext
+{
+    private readonly IMongoDatabase _database;
+
+    public MongoDBContext(IConfiguration configuration)
+    {
+        var connectionString = configuration.GetConnectionString("MongoDB");
+        var client = new MongoClient(connectionString);
+        _database = client.GetDatabase(configuration["MongoDB:DatabaseName"]);
+    }
+
+    public IMongoCollection<T> Collection<T>() where T : class
+    {
+        return _database.GetCollection<T>(typeof(T).Name.ToLower());
+    }
+}

@@ -10,7 +10,6 @@ on:
 jobs:
   deploy:
     runs-on: node
-    
     steps:
     - uses: actions/checkout@v4
     

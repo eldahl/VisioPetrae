@@ -1,5 +1,8 @@
 using backend.Services;
-
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using backend;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -11,6 +14,35 @@ builder.Services.AddControllers();
 
 // Register services
 builder.Services.AddSingleton<ProfileService>();
+builder.Services.AddSingleton<IMongoDBContext, MongoDBContext>();
+
+// JWT authentication
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+}).AddJwtBearer(bearerOpt => {
+    
+    var jwtConfig = builder.Configuration.GetSection("JWT");
+    var issuers = jwtConfig.GetSection("Issuers").Get<string[]>();
+    var audiences = jwtConfig.GetSection("Audiences").Get<string[]>();
+    var signingKey = jwtConfig["SigningKey"];
+
+    bearerOpt.TokenValidationParameters = new TokenValidationParameters
+    {
+        // Set proper values for JWT validation
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:JWTSigningKey"]!)),
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
+        ValidIssuer = builder.Configuration["JWT:Issuer"],
+        ValidAudience = builder.Configuration["JWT:Audience"],
+        // Make sure token expires exactly at token expiration time
+        ClockSkew = TimeSpan.Zero,
+    };
+});
 
 var app = builder.Build();
 
@@ -22,7 +54,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-// Add a ping pong endpoint
+// Heartbeat
 app.MapGet("/heartbeat", () => "ok");
 
 // Map controllers

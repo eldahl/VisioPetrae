@@ -1,11 +1,13 @@
 using Microsoft.AspNetCore.Mvc;
 using backend.Models;
 using backend.Services;
-
+using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Authorization;
+using System.Threading.Tasks;
 namespace backend.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     public class ProfileController : ControllerBase
     {
         private readonly ProfileService _profileService;
@@ -18,86 +20,65 @@ namespace backend.Controllers
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<Profile>> GetAllProfiles()
+        public async Task<ActionResult<IEnumerable<Profile>>> GetAllProfiles()
         {
-            return Ok(_profileService.GetAllProfiles());
+            return Ok(await _profileService.GetAllProfiles());
         }
 
-        [HttpGet("{id}")]
-        public ActionResult<Profile> GetProfile(int id)
+        [HttpGet("{uuid}")]
+        public async Task<ActionResult<Profile>> GetProfile(string uuid)
         {
-            var profile = _profileService.GetProfile(id);
+            var profile = await _profileService.GetProfileByUuid(uuid);
             if (profile == null)
-            {
                 return NotFound();
-            }
             return Ok(profile);
         }
 
         [HttpGet("username/{username}")]
-        public ActionResult<Profile> GetProfileByUsername(string username)
+        public async Task<ActionResult<Profile>> GetProfileByUsername(string username)
         {
-            var profile = _profileService.GetProfileByUsername(username);
+            var profile = await _profileService.GetProfileByUsername(username);
             if (profile == null)
-            {
                 return NotFound();
-            }
             return Ok(profile);
         }
 
         [HttpPost]
-        public ActionResult<Profile> CreateProfile(Profile profile)
+        public async Task<ActionResult<Profile>> CreateProfile(ProfileDTO profileDTO)
         {
-            var createdProfile = _profileService.CreateProfile(profile);
-            _logger.LogInformation("Created profile with ID: {ProfileId}", createdProfile.Id);
-            return CreatedAtAction(nameof(GetProfile), new { id = createdProfile.Id }, createdProfile);
+            var createdProfile = await _profileService.CreateProfile(profileDTO);
+            _logger.LogInformation("Created profile with UUID: {Uuid}", createdProfile.Uuid);
+            return Ok(createdProfile);
         }
 
-        [HttpPut("{id}")]
-        public IActionResult UpdateProfile(int id, Profile profile)
+        [HttpPut("{uuid}")]
+        public async Task<IActionResult> UpdateProfile(string uuid, ProfileDTO profileDTO)
         {
-            if (id != profile.Id)
-            {
-                return BadRequest("ID mismatch");
-            }
-
-            var existingProfile = _profileService.GetProfile(id);
-            if (existingProfile == null)
-            {
+            if (!await _profileService.ProfileExists(uuid))
                 return NotFound();
+
+            if (await _profileService.UpdateProfile(uuid, profileDTO))
+            {
+                _logger.LogInformation("Updated profile with UUID: {uuid}", uuid);
+                return Ok();
             }
 
-            if (_profileService.UpdateProfile(profile))
-            {
-                _logger.LogInformation("Updated profile with ID: {ProfileId}", profile.Id);
-                return NoContent();
-            }
-            
             return BadRequest("Failed to update profile");
         }
 
-        [HttpDelete("{id}")]
-        public IActionResult DeleteProfile(int id)
+        [HttpDelete("{uuid}")]
+        public async Task<IActionResult> DeleteProfile(string uuid)
         {
-            var profile = _profileService.GetProfile(id);
-            if (profile == null)
-            {
+            if (!await _profileService.ProfileExists(uuid))
                 return NotFound();
-            }
 
-            if (_profileService.DeleteProfile(id))
+            if (await _profileService.DeleteProfile(uuid))
             {
-                _logger.LogInformation("Deleted profile with ID: {ProfileId}", id);
-                return NoContent();
+                _logger.LogInformation("Deleted profile with UUID: {uuid}", uuid);
+                return Ok();
             }
-            
-            return BadRequest("Failed to delete profile");
-        }
 
-        [HttpGet("ping")]
-        public IActionResult Ping()
-        {
-            return Ok("pong");
+            return BadRequest("Failed to delete profile");
         }
     }
 } 

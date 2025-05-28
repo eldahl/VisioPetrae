@@ -1,53 +1,78 @@
 using backend.Models;
+using MongoDB.Driver;
 using System.Collections.Concurrent;
+using System.Threading.Tasks;
 
 namespace backend.Services
 {
     public class ProfileService
     {
-        private readonly ConcurrentDictionary<int, Profile> _profiles = new();
-        private int _nextId = 1;
+        private readonly IMongoDBContext _db;
+        private readonly ConcurrentDictionary<string, Profile> _profiles = new();
 
-        public IEnumerable<Profile> GetAllProfiles()
+        public ProfileService(IMongoDBContext db)
         {
-            return _profiles.Values;
+            _db = db;
         }
 
-        public Profile? GetProfile(int id)
+        public async virtual Task<IEnumerable<Profile>> GetAllProfiles()
         {
-            _profiles.TryGetValue(id, out var profile);
-            return profile;
+            // Get all profiles from the database
+            return await _db.Collection<Profile>().Find(_ => true).ToListAsync();
         }
 
-        public Profile? GetProfileByUsername(string username)
+        public async virtual Task<bool> ProfileExists(string uuid)
         {
-            return _profiles.Values.FirstOrDefault(p => p.Username.Equals(username, StringComparison.OrdinalIgnoreCase));
+            // Check if the profile exists in the database
+            return await _db.Collection<Profile>().CountDocumentsAsync(p => p.Uuid == uuid) > 0;
         }
 
-        public Profile CreateProfile(Profile profile)
+        public async virtual Task<Profile?> GetProfileByUuid(string uuid)
         {
-            profile.Id = Interlocked.Increment(ref _nextId) - 1;
+            // Get the profile from the database
+            return await _db.Collection<Profile>().Find(p => p.Uuid == uuid).FirstOrDefaultAsync();
+        }
+
+        public async virtual Task<Profile?> GetProfileByUsername(string username)
+        {
+            // Get the profile from the database
+            return await _db.Collection<Profile>().Find(p => p.Username == username).FirstOrDefaultAsync();
+        }
+
+        public async virtual Task<Profile> CreateProfile(ProfileDTO dto)
+        {
+            // Convert the profileDTO to a Profile
+            var profile = new Profile(dto);
+            profile.Uuid = Guid.NewGuid().ToString();
             profile.CreatedAt = DateTime.UtcNow;
             profile.UpdatedAt = DateTime.UtcNow;
             
-            _profiles[profile.Id] = profile;
+            // Insert the profile into the database
+            await _db.Collection<Profile>().InsertOneAsync(profile);
             return profile;
         }
 
-        public bool UpdateProfile(Profile profile)
+        public async virtual Task<bool> UpdateProfile(string uuid, ProfileDTO dto)
         {
-            if (!_profiles.ContainsKey(profile.Id))
-            {
+            // Get the profile from the database
+            var profile = await GetProfileByUuid(uuid);
+            
+            if (profile is null)
                 return false;
-            }
 
-            profile.UpdatedAt = DateTime.UtcNow;
-            return _profiles.TryUpdate(profile.Id, profile, _profiles[profile.Id]);
+            // Update the profile from the DTO
+            profile.UpdatedFromDTO(dto);
+                
+            // Replace the profile in the database
+            var result = await _db.Collection<Profile>().ReplaceOneAsync(p => p.Uuid == uuid, profile);
+            return result.ModifiedCount > 0;
         }
 
-        public bool DeleteProfile(int id)
+        public async virtual Task<bool> DeleteProfile(string uuid)
         {
-            return _profiles.TryRemove(id, out _);
+            // Delete the profile from the database
+            var result = await _db.Collection<Profile>().DeleteOneAsync(p => p.Uuid == uuid);
+            return result is null ? false : result.DeletedCount > 0;
         }
     }
 } 
