@@ -17,8 +17,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="../../inference_registry/appsettings.json" CopyToOutputDirectory="Never" />
-    <None Include="../../inference_registry/appsettings.Development.json" CopyToOutputDirectory="Never" /><None Include="../../inference_registry/appsettings.json" CopyToOutputDirectory="Never" />
+    <Content Include="../../inference_registry/appsettings.json" CopyToOutputDirectory="Never" />
+    <Content Include="../../inference_registry/appsettings.Development.json" CopyToOutputDirectory="Never" />
   </ItemGroup>
 
 </Project>
