@@ -19,7 +19,7 @@
   <ItemGroup>
     <None Include="../../inference_registry/appsettings.json">
       <CopyToPublishDirectory>Never</CopyToPublishDirectory>
-      <CopyToOuputDirectory>Never</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </None>
     <None Include="../../inference_registry/appsettings.Development.json">
       <CopyToPublishDirectory>Never</CopyToPublishDirectory>
