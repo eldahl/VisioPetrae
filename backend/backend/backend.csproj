@@ -16,4 +16,9 @@
     <ProjectReference Include="../../inference_registry/inference_registry.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Include="../../inference_registry/appsettings.json" CopyToOutputDirectory="Never" />
+    <None Include="../../inference_registry/appsettings.Development.json" CopyToOutputDirectory="Never" /><None Include="../../inference_registry/appsettings.json" CopyToOutputDirectory="Never" />
+  </ItemGroup>
+
 </Project>
