@@ -1,7 +1,7 @@
 import logo from './logo.svg';
 import styles from './App.module.css';
 import { createSignal, Show, onCleanup, onMount } from 'solid-js';
-
+import Footer from './components/Footer';
 
 
 
@@ -81,6 +81,7 @@ function App(props) {
           </nav>  
         </header>
         {props.children}
+        <Footer />
       </div>
   );
 }
