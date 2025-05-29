@@ -2,7 +2,7 @@ using backend.Models;
 using MongoDB.Driver;
 using System.Collections.Concurrent;
 using System.Threading.Tasks;
-
+using backend.Persistence;
 namespace backend.Services
 {
     public class ProfileService
@@ -62,8 +62,12 @@ namespace backend.Services
 
             // Update the profile from the DTO
             profile.UpdatedFromDTO(dto);
-                
-            // Replace the profile in the database
+            return await UpdateProfile(uuid, profile);
+        }
+
+        public async virtual Task<bool> UpdateProfile(string uuid, Profile profile)
+        {
+            // Update the profile in the database
             var result = await _db.Collection<Profile>().ReplaceOneAsync(p => p.Uuid == uuid, profile);
             return result.ModifiedCount > 0;
         }
@@ -73,6 +77,17 @@ namespace backend.Services
             // Delete the profile from the database
             var result = await _db.Collection<Profile>().DeleteOneAsync(p => p.Uuid == uuid);
             return result is null ? false : result.DeletedCount > 0;
+        }
+
+        public async virtual Task<bool> IsPasswordCorrect(string uuid, string password)
+        {
+            // Get the profile from the database
+            var profile = await GetProfileByUuid(uuid);
+            if (profile is null)
+                return false;
+
+            // Check if the password is correct
+            return CryptographyService.VerifyPassword(password, profile.Password);
         }
     }
 } 

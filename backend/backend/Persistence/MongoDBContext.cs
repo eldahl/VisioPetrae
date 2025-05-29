@@ -4,7 +4,7 @@ using MongoDB.Bson;
 using MongoDB.Driver;
 using Microsoft.Extensions.Configuration;
 
-namespace backend;
+namespace backend.Persistence;
 
 public interface IMongoDBContext
 {

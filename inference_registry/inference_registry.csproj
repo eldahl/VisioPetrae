@@ -10,9 +10,4 @@
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.4" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Content Include="../backend/backend/appsettings.json" CopyToPublishDirectory="Never" />
-    <Content Include="../backend/backend/appsettings.Development.json" CopyToPublishDirectory="Never" />
-  </ItemGroup>
-
 </Project>

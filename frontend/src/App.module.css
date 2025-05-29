@@ -3,16 +3,17 @@ body {
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
+  --header-height: 70px;
 }
 
 .App {
-  min-height: 100vh;
+  min-height: calc(100vh - var(--header-height));
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   text-align: center;
   /*background: linear-gradient(to bottom, #4b0082, #add8e6, #e6e6fa);*/
-  padding-top: 70px; /* Adjust padding to match new header height */
+  padding-top: var(--header-height);
 }
 
 .logo {
@@ -53,7 +54,6 @@ body {
   display: flex;
   justify-content: space-around;
   background: none;
-  padding: 0 0 20px 0;
 }
 
 .card {
@@ -609,4 +609,8 @@ body {
   display: block;
   width: 100%;
   margin-bottom: 1rem;
+}
+
+.bodyContainer {
+  padding-bottom: 3rem;
 }

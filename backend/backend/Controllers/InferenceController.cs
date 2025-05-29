@@ -1,9 +1,8 @@
 using System.Net.Http.Headers;
 using Microsoft.AspNetCore.Mvc;
-using inference_registry.Models;
 using Microsoft.AspNetCore.Authorization;
 using System.Text.Json;
-
+using backend.Models;
 namespace VPBackend_Controllers
 {
     [ApiController]

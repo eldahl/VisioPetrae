@@ -4,6 +4,9 @@ using backend.Services;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Authorization;
 using System.Threading.Tasks;
+using System.Security.Claims;
+using backend.Controllers;
+
 namespace backend.Controllers
 {
     [ApiController]
@@ -11,11 +14,13 @@ namespace backend.Controllers
     public class ProfileController : ControllerBase
     {
         private readonly ProfileService _profileService;
+        private readonly JwtService _jwtService;
         private readonly ILogger<ProfileController> _logger;
 
-        public ProfileController(ProfileService profileService, ILogger<ProfileController> logger)
+        public ProfileController(ProfileService profileService, JwtService jwtService, ILogger<ProfileController> logger)
         {
             _profileService = profileService;
+            _jwtService = jwtService;
             _logger = logger;
         }
 
@@ -44,41 +49,84 @@ namespace backend.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Profile>> CreateProfile(ProfileDTO profileDTO)
+        public async Task<ActionResult<Profile>> CreateProfile(ProfileDTO dto)
         {
-            var createdProfile = await _profileService.CreateProfile(profileDTO);
-            _logger.LogInformation("Created profile with UUID: {Uuid}", createdProfile.Uuid);
-            return Ok(createdProfile);
+            var profile = await _profileService.CreateProfile(dto);
+            _logger.LogInformation("Created profile with UUID: {Uuid}", profile.Uuid);
+            return Ok(profile);
         }
 
-        [HttpPut("{uuid}")]
-        public async Task<IActionResult> UpdateProfile(string uuid, ProfileDTO profileDTO)
-        {
-            if (!await _profileService.ProfileExists(uuid))
-                return NotFound();
-
-            if (await _profileService.UpdateProfile(uuid, profileDTO))
-            {
-                _logger.LogInformation("Updated profile with UUID: {uuid}", uuid);
-                return Ok();
-            }
-
-            return BadRequest("Failed to update profile");
-        }
-
+        [Authorize]
         [HttpDelete("{uuid}")]
         public async Task<IActionResult> DeleteProfile(string uuid)
         {
-            if (!await _profileService.ProfileExists(uuid))
-                return NotFound();
-
-            if (await _profileService.DeleteProfile(uuid))
+            // Verify the user is deleting their own profile
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (userId != uuid)
             {
-                _logger.LogInformation("Deleted profile with UUID: {uuid}", uuid);
-                return Ok();
+                return Forbid();
             }
 
-            return BadRequest("Failed to delete profile");
+            var success = await _profileService.DeleteProfile(uuid);
+            if (!success)
+            {
+                return NotFound();
+            }
+            return Ok();
+        }
+
+        [Authorize]
+        [HttpPost("login")]
+        public async Task<ActionResult<Profile>> Login(LoginDTO loginDto)
+        {
+            var profile = await _profileService.GetProfileByUsername(loginDto.Username);
+            if (profile == null)
+            {
+                return Unauthorized();
+            }
+
+            if (!await _profileService.IsPasswordCorrect(profile.Uuid, loginDto.Password))
+            {
+                return Unauthorized();
+            }
+
+            var token = _jwtService.GenerateToken(profile);
+            return Ok(new { profile, token });
+        }
+
+        [Authorize]
+        [HttpGet("me")]
+        public async Task<ActionResult<Profile>> GetCurrentProfile()
+        {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (userId == null)
+            {
+                return Unauthorized();
+            }
+
+            var profile = await _profileService.GetProfileByUuid(userId);
+            if (profile == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(profile);
+        }
+
+        // TODO: Add a method to add credits to a profile
+        [Authorize]
+        [HttpPost("add_credits")]
+        public async Task<IActionResult> AddCredits(string uuid, int amount)
+        {
+            var profile = await _profileService.GetProfileByUuid(uuid);
+            if (profile == null)
+            {
+                return NotFound();
+            }
+            
+            profile.AddCredits(amount);
+            await _profileService.UpdateProfile(uuid, profile);
+            return Ok();
         }
     }
 } 

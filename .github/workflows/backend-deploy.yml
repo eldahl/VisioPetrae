@@ -31,6 +31,12 @@ jobs:
       - name: Publish
         run: dotnet publish backend/backend/backend.csproj -c Release -o backend/backend/publish/ -r linux-x64 --self-contained true
 
+      - name: Deploy MongoDB container
+        run: |
+          docker kill mongo-container || true
+          docker rm mongo-container || true
+          docker run --name mongo-container -p 27017:27017 -e MONGO_INITDB_ROOT_USERNAME=root -e MONGO_INITDB_ROOT_PASSWORD=root -d mongo:latest
+
       - name: Start Service with tmux
         run: |
           cd backend/backend/publish/
