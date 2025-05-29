@@ -15,7 +15,7 @@ public class InferenceServer
 {
     public InferenceServer(InferenceServerDTO dto) : this(Guid.NewGuid().ToString(), dto.Hostname, dto.Port, dto.MaxTasks, dto.IsAvailable, dto.Status) {}
     public InferenceServer(string uuid, InferenceServerDTO dto) : this(uuid, dto.Hostname, dto.Port, dto.MaxTasks, dto.IsAvailable, dto.Status) {}
-    public InferenceServer(string uuid, string hostname = "localhost", int port = 8000, int maxTasks = 3, bool isAvailable = false, string status = "Offline") {
+    public InferenceServer(string uuid, string hostname = "localhost", int port = 8000, int maxTasks = 3, bool isAvailable = true, string status = "Online") {
         this.Uuid = uuid;
         this.Hostname = hostname;
         this.Port = port;
