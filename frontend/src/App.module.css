@@ -54,7 +54,6 @@ body {
   display: flex;
   justify-content: space-around;
   background: none;
-  padding: 0 0 20px 0;
 }
 
 .card {
@@ -610,4 +609,8 @@ body {
   display: block;
   width: 100%;
   margin-bottom: 1rem;
+}
+
+.bodyContainer {
+  padding-bottom: 3rem;
 }

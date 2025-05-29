@@ -80,7 +80,9 @@ function App(props) {
             </div>
           </nav>  
         </header>
-        {props.children}
+        <div class={styles.bodyContainer}>
+          {props.children}
+        </div>
         <Footer />
       </div>
   );
