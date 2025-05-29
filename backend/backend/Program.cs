@@ -2,7 +2,8 @@ using backend.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
-using backend;
+using backend.Persistence;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -15,6 +16,7 @@ builder.Services.AddControllers();
 // Register services
 builder.Services.AddSingleton<ProfileService>();
 builder.Services.AddSingleton<IMongoDBContext, MongoDBContext>();
+builder.Services.AddSingleton<JwtService>();
 
 // JWT authentication
 builder.Services.AddAuthentication(options =>
@@ -42,6 +44,17 @@ builder.Services.AddAuthentication(options =>
         // Make sure token expires exactly at token expiration time
         ClockSkew = TimeSpan.Zero,
     };
+});
+
+// Add CORS
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll", builder =>
+    {
+        builder.AllowAnyOrigin()
+               .AllowAnyMethod()
+               .AllowAnyHeader();
+    });
 });
 
 var app = builder.Build();

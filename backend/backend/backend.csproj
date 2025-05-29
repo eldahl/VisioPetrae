@@ -10,21 +10,7 @@
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.4" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.5" />
     <PackageReference Include="MongoDB.Driver" Version="3.4.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="../../inference_registry/inference_registry.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="../../inference_registry/appsettings.json">
-      <CopyToPublishDirectory>Never</CopyToPublishDirectory>
-      <CopyToOuputDirectory>Never</CopyToOutputDirectory>
-    </None>
-    <None Include="../../inference_registry/appsettings.Development.json">
-      <CopyToPublishDirectory>Never</CopyToPublishDirectory>
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </None>
+    <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
   </ItemGroup>
 
 </Project>
