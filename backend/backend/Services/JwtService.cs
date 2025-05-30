@@ -30,7 +30,7 @@ namespace backend.Services
 
             var claims = new[]
             {
-                new Claim(JwtRegisteredClaimNames.Sub, profile.Uuid),
+                new Claim(JwtRegisteredClaimNames.Sub, profile.Uuid.ToString()),
                 new Claim(JwtRegisteredClaimNames.UniqueName, profile.Username),
                 new Claim(JwtRegisteredClaimNames.Email, profile.Email),
                 new Claim("credits", profile.Credits.ToString()),

@@ -101,7 +101,7 @@ namespace backend.Controllers
                 return Unauthorized();
             }
 
-            if (!await _profileService.IsPasswordCorrect(profile.Uuid, loginDto.Password))
+            if (!await _profileService.IsPasswordCorrect(profile.Uuid.ToString(), loginDto.Password))
             {
                 return Unauthorized();
             }
