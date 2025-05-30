@@ -48,6 +48,7 @@ namespace VPBackend_Controllers
                 _logger.LogInformation("Inference job completed. dialog_uuid: {dialog_uuid}, server_uuid: {server_uuid}, response: {response}", res.dialog_uuid, res.server_uuid, res.response);
                 return Ok(res.response);
             }
+            _logger.LogError("Failed to request inference job. status code: {statusCode}, response: {response}", response.StatusCode, await response.Content.ReadAsStringAsync());
             return StatusCode(500, "Failed to request inference job.");
         }
     }
