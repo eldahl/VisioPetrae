@@ -20,7 +20,7 @@ function Profile() {
         return;
       }
 
-      const response = await fetch('/api/profile', {
+      const response = await fetch('https://vps.eldc.dk/api/Profile/me', {
         headers: {
           'Authorization': `Bearer ${token}`,
         },
@@ -50,7 +50,7 @@ function Profile() {
 
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch('/api/profile', {
+      const response = await fetch('https://vps.eldc.dk/api/Profile', {
         method: 'PUT',
         headers: {
           'Authorization': `Bearer ${token}`,

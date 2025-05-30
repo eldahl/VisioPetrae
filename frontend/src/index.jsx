@@ -13,6 +13,7 @@ import Contact from './pages/Contact';
 import Inference from './pages/Inference';
 import Login from './pages/Login';
 import Register from './pages/Register';
+import Profile from './pages/Profile';
 
 const root = document.getElementById('root');
 
@@ -31,4 +32,5 @@ render(() => (
   <Route path="/vp/inference" component={() => <App><Inference /></App>} />
   <Route path="/vp/login" component={() => <App><Login /></App>} />
   <Route path="/vp/register" component={() => <App><Register /></App>} />
+  <Route path="/vp/profile" component={() => <App><Profile /></App>} />
 </Router>), root);
