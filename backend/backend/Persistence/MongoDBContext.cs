@@ -17,7 +17,7 @@ public class MongoDBContext : IMongoDBContext
 
     public MongoDBContext(IConfiguration configuration)
     {
-        var connectionString = configuration.GetConnectionString("MongoDB");
+        var connectionString = configuration["MongoDB:ConnectionString"] ?? throw new Exception("MongoDB connection string is not set");
         var client = new MongoClient(connectionString);
         _database = client.GetDatabase(configuration["MongoDB:DatabaseName"]);
     }
