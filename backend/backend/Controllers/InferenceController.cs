@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using System.Text.Json;
 using backend.Models;
+using System.Net;
+using System.Security.Authentication;
 namespace VPBackend_Controllers
 {
     [ApiController]
@@ -23,7 +25,9 @@ namespace VPBackend_Controllers
         [Authorize]
         public async Task<IActionResult> RequestInferenceJob(InferenceRequest job)
         {
-            HttpClient client = new HttpClient();
+            HttpClient client = new HttpClient(new HttpClientHandler() {
+                SslProtocols = SslProtocols.Tls12 | SslProtocols.Tls13,
+            });
             client.BaseAddress = new Uri(_configuration["REGISTRY_URL"] ?? throw new Exception("REGISTRY_URL is not set"));
             var response = await client.PostAsJsonAsync("Request/inferRequest", job);
             if (response.IsSuccessStatusCode)
