@@ -1,4 +1,7 @@
 using System;
+using System.Text.Json.Serialization;
+using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
 
 namespace backend.Models
 {
@@ -19,6 +22,10 @@ namespace backend.Models
             this.UpdatedAt = DateTime.UtcNow;
         }
 
+        [BsonElement("_id")]
+        [JsonPropertyName("_id")]
+        [BsonId]
+        [BsonRepresentation(BsonType.ObjectId)]
         public string Uuid { get; set; } = string.Empty;
         public string Username { get; set; } = string.Empty;
         public string Password { get; set; } = string.Empty;

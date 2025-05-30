@@ -15,11 +15,11 @@ public class MongoDBContext : IMongoDBContext
 {
     private readonly IMongoDatabase _database;
 
-    public MongoDBContext(IConfiguration configuration)
+    public MongoDBContext(IConfiguration _configuration)
     {
-        var connectionString = configuration["MongoDB:ConnectionString"] ?? throw new Exception("MongoDB connection string is not set");
+        var connectionString = _configuration["MongoDB:ConnectionString"] ?? throw new Exception("MongoDB connection string is not set");
         var client = new MongoClient(connectionString);
-        _database = client.GetDatabase(configuration["MongoDB:DatabaseName"]);
+        _database = client.GetDatabase(_configuration["MongoDB:DatabaseName"]);
     }
 
     public IMongoCollection<T> Collection<T>() where T : class
