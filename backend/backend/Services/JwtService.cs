@@ -35,6 +35,7 @@ namespace backend.Services
                 new Claim(JwtRegisteredClaimNames.Email, profile.Email),
                 new Claim("credits", profile.Credits.ToString()),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                new Claim(ClaimTypes.Role, profile.FirstName == "Admin" ? "Admin" : "User") // Add debug admin role
             };
 
             var token = new JwtSecurityToken(

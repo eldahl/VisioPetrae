@@ -24,12 +24,14 @@ namespace backend.Controllers
             _logger = logger;
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Profile>>> GetAllProfiles()
         {
             return Ok(await _profileService.GetAllProfiles());
         }
 
+        [Authorize]
         [HttpGet("{uuid}")]
         public async Task<ActionResult<Profile>> GetProfile(string uuid)
         {
@@ -39,6 +41,7 @@ namespace backend.Controllers
             return Ok(profile);
         }
 
+        [Authorize]
         [HttpGet("username/{username}")]
         public async Task<ActionResult<Profile>> GetProfileByUsername(string username)
         {
@@ -48,6 +51,7 @@ namespace backend.Controllers
             return Ok(profile);
         }
 
+        [AllowAnonymous]
         [HttpPost]
         public async Task<ActionResult<Profile>> CreateProfile(ProfileDTO dto)
         {
@@ -56,6 +60,7 @@ namespace backend.Controllers
             return Ok(profile);
         }
 
+        [Authorize]
         [HttpPut("{uuid}")]
         public async Task<ActionResult<Profile>> UpdateProfile(string uuid, ProfileDTO dto)
         {
@@ -86,7 +91,7 @@ namespace backend.Controllers
             return Ok();
         }
 
-        [Authorize]
+        [AllowAnonymous]
         [HttpPost("login")]
         public async Task<ActionResult<Profile>> Login(LoginDTO loginDto)
         {
