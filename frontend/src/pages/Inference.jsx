@@ -66,14 +66,15 @@ function Inference() {
     setResult(null);
 
     const formData = new FormData();
-    formData.append('file', selectedFile());
+    formData.append('image', selectedFile());
     formData.append('prompt', prompt());
 
     try {
+      const storedToken = localStorage.getItem('token');
       const response = await fetch('https://vps.eldc.dk/api/Inference/request_inference_job', {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${token()}`,
+          'Authorization': `Bearer ${storedToken}`,
         },
         body: formData,
       });
