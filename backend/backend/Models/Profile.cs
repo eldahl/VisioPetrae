@@ -5,6 +5,7 @@ using MongoDB.Bson.Serialization.Attributes;
 
 namespace backend.Models
 {
+    [BsonIgnoreExtraElements]
     public class Profile
     {
         public Profile(ProfileDTO dto)
@@ -21,11 +22,7 @@ namespace backend.Models
             this.CreatedAt = DateTime.UtcNow;
             this.UpdatedAt = DateTime.UtcNow;
         }
-
-        [BsonElement("_id")]
-        [JsonPropertyName("_id")]
-        [BsonId]
-        [BsonRepresentation(BsonType.ObjectId)]
+        
         public Guid Uuid { get; set; }
         public string Username { get; set; } = string.Empty;
         public string Password { get; set; } = string.Empty;
