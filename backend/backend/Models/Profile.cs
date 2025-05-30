@@ -9,7 +9,7 @@ namespace backend.Models
     {
         public Profile(ProfileDTO dto)
         {
-            this.Uuid = Guid.NewGuid().ToString();
+            this.Uuid = Guid.NewGuid();
             this.Username = dto.Username;
             this.Password = CryptographyService.HashPassword(dto.Password);
             this.Email = dto.Email;
@@ -26,7 +26,7 @@ namespace backend.Models
         [JsonPropertyName("_id")]
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
-        public string Uuid { get; set; } = string.Empty;
+        public Guid Uuid { get; set; }
         public string Username { get; set; } = string.Empty;
         public string Password { get; set; } = string.Empty;
         public string Salt { get; set; } = string.Empty;
@@ -41,6 +41,7 @@ namespace backend.Models
 
         public void UpdatedFromDTO(ProfileDTO dto)
         {
+            this.Uuid = Guid.NewGuid();
             this.Username = dto.Username;
             this.Password = CryptographyService.HashPassword(dto.Password);
             this.Email = dto.Email;
