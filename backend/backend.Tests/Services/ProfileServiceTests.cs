@@ -74,7 +74,7 @@ public class ProfileServiceTests
             .ReturnsAsync(cursor.Object);
 
         // Act
-        var result = await _service.GetProfileByUuid(profile.Uuid.ToString());
+        var result = await _service.GetProfileByUuid(profile.Uuid);
 
         // Assert
         Assert.NotNull(result);
@@ -134,7 +134,7 @@ public class ProfileServiceTests
 
         // Assert
         Assert.NotNull(result);
-        Assert.NotEmpty(result.Uuid.ToString());
+        Assert.NotEmpty(result.Uuid);
         Assert.Equal(dto.Username, result.Username);
         Assert.Equal(dto.Email, result.Email);
         Assert.Equal(dto.FirstName, result.FirstName);
@@ -181,7 +181,7 @@ public class ProfileServiceTests
         };
 
         // Act
-        var result = await _service.UpdateProfile(profile.Uuid.ToString(), updateDto);
+        var result = await _service.UpdateProfile(profile.Uuid, updateDto);
 
         // Assert
         Assert.True(result);

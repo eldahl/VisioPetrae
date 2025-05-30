@@ -24,13 +24,13 @@ namespace backend.Services
         public async virtual Task<bool> ProfileExists(string uuid)
         {
             // Check if the profile exists in the database
-            return await _db.Collection<Profile>().CountDocumentsAsync(p => p.Uuid == Guid.Parse(uuid)) > 0;
+            return await _db.Collection<Profile>().CountDocumentsAsync(p => p.Uuid == uuid) > 0;
         }
 
         public async virtual Task<Profile?> GetProfileByUuid(string uuid)
         {
             // Get the profile from the database
-            return await _db.Collection<Profile>().Find(p => p.Uuid == Guid.Parse(uuid)).FirstOrDefaultAsync();
+            return await _db.Collection<Profile>().Find(p => p.Uuid == uuid).FirstOrDefaultAsync();
         }
 
         public async virtual Task<Profile?> GetProfileByUsername(string username)
@@ -43,7 +43,10 @@ namespace backend.Services
         {
             // Convert the profileDTO to a Profile
             var profile = new Profile(dto);
-
+            profile.Uuid = Guid.NewGuid().ToString();
+            profile.CreatedAt = DateTime.UtcNow;
+            profile.UpdatedAt = DateTime.UtcNow;
+            
             // Insert the profile into the database
             await _db.Collection<Profile>().InsertOneAsync(profile);
             return profile;
@@ -65,7 +68,7 @@ namespace backend.Services
         public async virtual Task<bool> UpdateProfile(string uuid, Profile profile)
         {
             // Update the profile in the database
-            var result = await _db.Collection<Profile>().ReplaceOneAsync(p => p.Uuid == Guid.Parse(uuid), profile);
+            var result = await _db.Collection<Profile>().ReplaceOneAsync(p => p.Uuid == uuid, profile);
             return result.ModifiedCount > 0;
         }
 
@@ -77,7 +80,7 @@ namespace backend.Services
                 return false;
 
             // Delete the profile from the database
-            var result = await _db.Collection<Profile>().DeleteOneAsync(p => p.Uuid == Guid.Parse(uuid));
+            var result = await _db.Collection<Profile>().DeleteOneAsync(p => p.Uuid == uuid);
             return result is null ? false : result.DeletedCount > 0;
         }
 

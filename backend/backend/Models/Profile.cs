@@ -1,16 +1,12 @@
 using System;
-using System.Text.Json.Serialization;
-using MongoDB.Bson;
-using MongoDB.Bson.Serialization.Attributes;
 
 namespace backend.Models
 {
-    [BsonIgnoreExtraElements]
     public class Profile
     {
         public Profile(ProfileDTO dto)
         {
-            this.Uuid = Guid.NewGuid();
+            this.Uuid = Guid.NewGuid().ToString();
             this.Username = dto.Username;
             this.Password = CryptographyService.HashPassword(dto.Password);
             this.Email = dto.Email;
@@ -22,8 +18,8 @@ namespace backend.Models
             this.CreatedAt = DateTime.UtcNow;
             this.UpdatedAt = DateTime.UtcNow;
         }
-        
-        public Guid Uuid { get; set; }
+
+        public string Uuid { get; set; } = string.Empty;
         public string Username { get; set; } = string.Empty;
         public string Password { get; set; } = string.Empty;
         public string Salt { get; set; } = string.Empty;

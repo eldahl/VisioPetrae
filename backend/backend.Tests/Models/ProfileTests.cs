@@ -23,7 +23,7 @@ public class ProfileTests
         var profile = new Profile(dto);
 
         // Assert
-        Assert.NotEmpty(profile.Uuid.ToString());
+        Assert.NotEmpty(profile.Uuid);
         Assert.Equal(dto.Username, profile.Username);
         Assert.Equal(dto.Email, profile.Email);
         Assert.Equal(dto.FirstName, profile.FirstName);
