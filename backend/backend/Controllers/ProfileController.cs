@@ -56,6 +56,17 @@ namespace backend.Controllers
             return Ok(profile);
         }
 
+        [HttpPut("{uuid}")]
+        public async Task<ActionResult<Profile>> UpdateProfile(string uuid, ProfileDTO dto)
+        {
+            var exists = await _profileService.ProfileExists(uuid);
+            if (!exists)
+                return NotFound();
+            
+            var profile = await _profileService.UpdateProfile(uuid, dto);
+            return Ok(profile);
+        }
+
         [Authorize]
         [HttpDelete("{uuid}")]
         public async Task<IActionResult> DeleteProfile(string uuid)

@@ -5,7 +5,13 @@ using Microsoft.Extensions.Logging;
 using backend.Controllers;
 using backend.Models;
 using backend.Services;
-
+using backend.Persistence;
+using System.IdentityModel.Tokens.Jwt;
+using Microsoft.Extensions.Configuration;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Routing;
+using Microsoft.AspNetCore.Mvc.Controllers;
 namespace backend.Tests.Controllers;
 
 public class ProfileControllerTests
@@ -13,13 +19,25 @@ public class ProfileControllerTests
     private readonly Mock<ProfileService> _serviceMock;
     private readonly Mock<ILogger<ProfileController>> _loggerMock;
     private readonly ProfileController _controller;
+    private readonly Mock<JwtService> _jwtServiceMock;
+    private readonly Mock<IConfiguration> _configurationMock;
 
     public ProfileControllerTests()
     {
         var dbMock = new Mock<IMongoDBContext>();
         _serviceMock = new Mock<ProfileService>(dbMock.Object);
         _loggerMock = new Mock<ILogger<ProfileController>>();
-        _controller = new ProfileController(_serviceMock.Object, _loggerMock.Object);
+        
+        _configurationMock = new Mock<IConfiguration>();
+        _configurationMock.Setup(c => c["Jwt:SecretKey"]).Returns("test-secret-key");
+        _configurationMock.Setup(c => c["Jwt:Issuer"]).Returns("test-issuer");
+        _configurationMock.Setup(c => c["Jwt:Audience"]).Returns("test-audience");
+
+        _jwtServiceMock = new Mock<JwtService>(_configurationMock.Object);
+        _controller = new ProfileController(_serviceMock.Object, _jwtServiceMock.Object, _loggerMock.Object);
+
+        _jwtServiceMock.Setup(jwt => jwt.ValidateToken(It.IsAny<string>()))
+            .Returns(new System.Security.Claims.ClaimsPrincipal());
     }
 
     [Fact]
@@ -153,7 +171,7 @@ public class ProfileControllerTests
         var result = await _controller.UpdateProfile("test-uuid", dto);
 
         // Assert
-        Assert.IsType<OkResult>(result);
+        Assert.IsType<OkObjectResult>(result.Result);
     }
 
     [Fact]
@@ -168,20 +186,30 @@ public class ProfileControllerTests
         var result = await _controller.UpdateProfile("nonexistent", dto);
 
         // Assert
-        Assert.IsType<NotFoundResult>(result);
+        Assert.IsType<NotFoundResult>(result.Result);
     }
 
     [Fact]
     public async Task DeleteProfile_WhenProfileExists_ReturnsOk()
     {
         // Arrange
+        var userId = "test-uuid";
+        var uuid = "test-uuid";
+        
+        var _contextMock = new Mock<HttpContext>();
+        _contextMock.Setup(c => c.User.FindFirst(ClaimTypes.NameIdentifier))
+            .Returns(new Claim(ClaimTypes.NameIdentifier, uuid));
+
+        var _controllerContext = new ControllerContext(new ActionContext(_contextMock.Object, new RouteData(), new ControllerActionDescriptor()));
+        _controller.ControllerContext = _controllerContext;
+
         _serviceMock.Setup(s => s.ProfileExists(It.IsAny<string>()))
             .ReturnsAsync(true);
         _serviceMock.Setup(s => s.DeleteProfile(It.IsAny<string>()))
             .ReturnsAsync(true);
 
         // Act
-        var result = await _controller.DeleteProfile("test-uuid");
+        var result = await _controller.DeleteProfile(userId);
 
         // Assert
         Assert.IsType<OkResult>(result);
@@ -191,11 +219,22 @@ public class ProfileControllerTests
     public async Task DeleteProfile_WhenProfileDoesNotExist_ReturnsNotFound()
     {
         // Arrange
+        var userId = "test-uuid";
+        var uuid = "test-uuid";
+
+        var _contextMock = new Mock<HttpContext>();
+        _contextMock.Setup(c => c.User.FindFirst(ClaimTypes.NameIdentifier))
+            .Returns(new Claim(ClaimTypes.NameIdentifier, uuid));
+
+        var _controllerContext = new ControllerContext(new ActionContext(_contextMock.Object, new RouteData(), new ControllerActionDescriptor()));
+        _controller.ControllerContext = _controllerContext;
+
+
         _serviceMock.Setup(s => s.ProfileExists(It.IsAny<string>()))
             .ReturnsAsync(false);
 
         // Act
-        var result = await _controller.DeleteProfile("nonexistent");
+        var result = await _controller.DeleteProfile(userId);
 
         // Assert
         Assert.IsType<NotFoundResult>(result);

@@ -4,6 +4,7 @@ using backend.Models;
 using backend.Services;
 using MongoDB.Driver;
 using System.Threading.Tasks;
+using backend.Persistence;
 
 namespace backend.Tests.Services;
 
@@ -190,6 +191,10 @@ public class ProfileServiceTests
     public async Task DeleteProfile_WhenProfileExists_DeletesAndReturnsTrue()
     {
         // Arrange
+        _collectionMock.Setup(c => c.CountDocumentsAsync(
+            It.IsAny<FilterDefinition<Profile>>(), 
+            It.IsAny<CountOptions>(), 
+            It.IsAny<CancellationToken>())).ReturnsAsync(1);
         _collectionMock.Setup(c => c.DeleteOneAsync(
             It.IsAny<FilterDefinition<Profile>>(),
             It.IsAny<CancellationToken>()))

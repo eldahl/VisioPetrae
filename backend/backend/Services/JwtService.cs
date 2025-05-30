@@ -23,7 +23,7 @@ namespace backend.Services
             _audience = _configuration["Jwt:Audience"] ?? throw new ArgumentNullException("Jwt:Audience");
         }
 
-        public string GenerateToken(Profile profile)
+        public virtual string GenerateToken(Profile profile)
         {
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_secretKey));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
@@ -48,7 +48,7 @@ namespace backend.Services
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
-        public ClaimsPrincipal? ValidateToken(string token)
+        public virtual ClaimsPrincipal? ValidateToken(string token)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.UTF8.GetBytes(_secretKey);

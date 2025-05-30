@@ -74,6 +74,11 @@ namespace backend.Services
 
         public async virtual Task<bool> DeleteProfile(string uuid)
         {
+            // Check if the profile exists
+            var exists = await ProfileExists(uuid);
+            if (!exists)
+                return false;
+
             // Delete the profile from the database
             var result = await _db.Collection<Profile>().DeleteOneAsync(p => p.Uuid == uuid);
             return result is null ? false : result.DeletedCount > 0;
