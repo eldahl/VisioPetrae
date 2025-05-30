@@ -18,9 +18,9 @@ namespace backend.Services
         public JwtService(IConfiguration configuration)
         {
             _configuration = configuration;
-            _secretKey = _configuration["Jwt:SecretKey"] ?? throw new ArgumentNullException("Jwt:SecretKey");
-            _issuer = _configuration["Jwt:Issuer"] ?? throw new ArgumentNullException("Jwt:Issuer");
-            _audience = _configuration["Jwt:Audience"] ?? throw new ArgumentNullException("Jwt:Audience");
+            _secretKey = _configuration["JWT:SecretKey"] ?? throw new ArgumentNullException("JWT:SecretKey");
+            _issuer = _configuration["JWT:Issuer"] ?? throw new ArgumentNullException("JWT:Issuer");
+            _audience = _configuration["JWT:Audience"] ?? throw new ArgumentNullException("JWT:Audience");
         }
 
         public virtual string GenerateToken(Profile profile)
