@@ -46,6 +46,13 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
+// Logging
+builder.Services.AddLogging(loggingBuilder =>
+{
+    loggingBuilder.AddConsole();
+    loggingBuilder.AddDebug();
+});
+
 // Add CORS
 builder.Services.AddCors(options =>
 {
