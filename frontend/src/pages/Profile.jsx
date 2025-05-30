@@ -87,6 +87,7 @@ function Profile() {
       const data = await response.json();
       setProfile(data);
       setEditMode(false);
+      window.location.reload();
     } catch (err) {
       setError('Failed to update profile');
     }
@@ -107,7 +108,7 @@ function Profile() {
             <div class={styles.profileHeader}>
             <div class={styles.profileAvatar}>
                 {profile()?.avatarUrl ? (
-                <img src={profile().avatarUrl} alt="Profile" />
+                <img src={profile().avatarUrl} alt="Profile" style={{"max-width": '100%', "max-height": '100%'}}/>
                 ) : (
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
                     <circle cx="12" cy="8" r="4" />
