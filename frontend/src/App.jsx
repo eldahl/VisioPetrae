@@ -9,6 +9,7 @@ function App(props) {
   const [isNavMenuOpen, setIsNavMenuOpen] = createSignal(false);
   const [isProfileMenuOpen, setIsProfileMenuOpen] = createSignal(false);
   const [windowWidth, setWindowWidth] = createSignal(window.innerWidth);
+  const [isLoggedIn, setIsLoggedIn] = createSignal(false);
 
   const toggleNavMenu = () => {
     setIsNavMenuOpen(!isNavMenuOpen());
@@ -31,6 +32,9 @@ function App(props) {
   onMount(() => {
     document.addEventListener('click', handleClickOutside);
     window.addEventListener('resize', handleResize);
+
+    const token = localStorage.getItem('token');
+    setIsLoggedIn(token !== null);
   });
 
   onCleanup(() => {
@@ -70,11 +74,17 @@ function App(props) {
                 </svg>
                 <span class={styles.profileMenuIcon}>▼</span>
                 {isProfileMenuOpen() && (
+                  (isLoggedIn() && (
                   <ul class={styles.profileDropdownMenu}>
                     <li><a href="/vp/profile">Profile</a></li>
                     <li><a href="/vp/settings">Settings</a></li>
                     <li><a href="/vp/logout">Logout</a></li>
                   </ul>
+                  )) || (!isLoggedIn() && (
+                  <ul class={styles.profileDropdownMenu}>
+                    <li><a href="/vp/login">Login</a></li>
+                  </ul>
+                  ))
                 )}
               </div>
             </div>
