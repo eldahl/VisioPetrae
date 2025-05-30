@@ -2,7 +2,7 @@ import { createSignal } from 'solid-js';
 import styles from '../App.module.css';
 
 function Login() {
-  const [email, setEmail] = createSignal('');
+  const [username, setUsername] = createSignal('');
   const [password, setPassword] = createSignal('');
   const [error, setError] = createSignal('');
 
@@ -17,7 +17,7 @@ function Login() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          username: email(),
+          username: username(),
           password: password(),
         }),
       });
@@ -30,7 +30,7 @@ function Login() {
       localStorage.setItem('token', data.token);
       window.location.href = '/vp/profile';
     } catch (err) {
-      setError('Invalid email or password');
+      setError('Invalid username or password');
     }
   };
 
@@ -42,12 +42,12 @@ function Login() {
           {error() && <div class={styles.error}>{error()}</div>}
           
           <div class={styles.formGroup}>
-            <label for="email">Email</label>
+            <label for="username">Username</label>
             <input
-              type="email"
-              id="email"
-              value={email()}
-              onInput={(e) => setEmail(e.target.value)}
+              type="text"
+              id="username"
+              value={username()}
+              onInput={(e) => setUsername(e.target.value)}
               required
             />
           </div>
