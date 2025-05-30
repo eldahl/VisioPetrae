@@ -77,8 +77,10 @@ function App(props) {
                   (isLoggedIn() && (
                   <ul class={styles.profileDropdownMenu}>
                     <li><a href="/vp/profile">Profile</a></li>
-                    <li><a href="/vp/settings">Settings</a></li>
-                    <li><a href="/vp/logout">Logout</a></li>
+                    <li><a onclick={()=>{
+                      localStorage.removeItem('token');
+                      window.location.reload();
+                    }}>Logout</a></li>
                   </ul>
                   )) || (!isLoggedIn() && (
                   <ul class={styles.profileDropdownMenu}>
