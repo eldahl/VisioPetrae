@@ -88,11 +88,10 @@ function Profile() {
     }
   };
 
-  if (loading()) {
-    return <div class={styles.pageContainer}>Loading...</div>;
-  }
-
   return (
+    loading() ? (
+      <div class={styles.pageContainer}>Loading...</div>
+    ) : (
     <div class={styles.pageContainer}>
       <h1>Profile</h1>
       
@@ -206,7 +205,7 @@ function Profile() {
         )}
       </div>
     </div>
-  );
+  ));
 }
 
 export default Profile; 
