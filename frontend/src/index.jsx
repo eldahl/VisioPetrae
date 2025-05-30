@@ -12,6 +12,7 @@ import Pricing from './pages/Pricing';
 import Contact from './pages/Contact';
 import Inference from './pages/Inference';
 import Login from './pages/Login';
+import Register from './pages/Register';
 
 const root = document.getElementById('root');
 
@@ -29,4 +30,5 @@ render(() => (
   <Route path="/vp/contact" component={() => <App><Contact /></App>} />
   <Route path="/vp/inference" component={() => <App><Inference /></App>} />
   <Route path="/vp/login" component={() => <App><Login /></App>} />
+  <Route path="/vp/register" component={() => <App><Register /></App>} />
 </Router>), root);

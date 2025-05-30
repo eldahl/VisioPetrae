@@ -719,3 +719,27 @@ body {
     grid-template-columns: 1fr;
   }
 }
+
+.success {
+  background-color: #e8f5e9;
+  color: #2e7d32;
+  padding: 0.75rem;
+  border-radius: 4px;
+  margin-bottom: 1rem;
+}
+
+.form textarea {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-family: inherit;
+  font-size: 1rem;
+  resize: vertical;
+}
+
+.form textarea:focus {
+  outline: none;
+  border-color: #4b0082;
+  box-shadow: 0 0 0 2px rgba(75, 0, 130, 0.2);
+}
