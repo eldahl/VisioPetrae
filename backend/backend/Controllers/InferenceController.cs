@@ -29,7 +29,16 @@ namespace VPBackend_Controllers
                 SslProtocols = SslProtocols.Tls12 | SslProtocols.Tls13,
             });
             client.BaseAddress = new Uri(_configuration["REGISTRY_URL"] ?? throw new Exception("REGISTRY_URL is not set"));
-            var response = await client.PostAsJsonAsync("Request/inferRequest", job);
+            
+            var formData = new MultipartFormDataContent();
+            // image
+            var imageContent = new StreamContent(job.image.OpenReadStream());
+            imageContent.Headers.ContentType = new MediaTypeHeaderValue(job.image.ContentType);
+            formData.Add(imageContent, "image", job.image.FileName);
+            // prompt
+            formData.Add(new StringContent(job.prompt), "prompt");
+            
+            var response = await client.PostAsJsonAsync("Request/inferRequest", formData);
             if (response.IsSuccessStatusCode)
             {
                 var res = JsonSerializer.Deserialize<InferenceResponse>(await response.Content.ReadAsStringAsync());
