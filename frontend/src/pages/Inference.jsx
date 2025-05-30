@@ -83,7 +83,7 @@ function Inference() {
         throw new Error('Inference request failed');
       }
 
-      const data = await response.json();
+      const data = await response.text();
       setResult(data);
     } catch (err) {
       setError(err.message);
