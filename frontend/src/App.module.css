@@ -787,3 +787,22 @@ body {
   border: 1px solid #ddd;
   color: #4b0082;
 }
+
+.creditsInfo {
+  margin-top: 1rem;
+  padding: 1rem;
+  background-color: #f8f9fa;
+  border-radius: 4px;
+  border: 1px solid #e9ecef;
+}
+
+.credits {
+  font-weight: bold;
+  color: #4b0082;
+}
+
+.creditsWarning {
+  margin-top: 0.5rem;
+  color: #dc3545;
+  font-size: 0.9rem;
+}

@@ -9,14 +9,32 @@ function Inference() {
   const [isLoading, setIsLoading] = createSignal(false);
   const [error, setError] = createSignal('');
   const [result, setResult] = createSignal(null);
+  const [credits, setCredits] = createSignal(0);
 
-  onMount(() => {
+  onMount(async () => {
     const storedToken = localStorage.getItem('token');
     if (!storedToken) {
       window.location.href = '/vp/login';
       return;
     }
     setToken(storedToken);
+
+    try {
+      const response = await fetch('https://vps.eldc.dk/api/Profile/me', {
+        headers: {
+          'Authorization': `Bearer ${storedToken}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to fetch profile');
+      }
+
+      const data = await response.json();
+      setCredits(data.credits || 0);
+    } catch (err) {
+      setError('Failed to load profile information');
+    }
   });
 
   const handleFileChange = (event) => {
@@ -35,6 +53,11 @@ function Inference() {
     event.preventDefault();
     if (!selectedFile()) {
       setError('Please select a file');
+      return;
+    }
+
+    if (credits() <= 0) {
+      setError('You have no credits remaining. Please purchase more credits to continue.');
       return;
     }
 
@@ -77,6 +100,12 @@ function Inference() {
           <p>Your token:</p>
           <code class={styles.token}>{token()}</code>
         </div>
+        <div class={styles.creditsInfo}>
+          <p>Available Credits: <span class={styles.credits}>{credits()}</span></p>
+          {credits() <= 0 && (
+            <p class={styles.creditsWarning}>You have no credits remaining. Please purchase more credits to continue.</p>
+          )}
+        </div>
       </div>
 
       <h1>Or.. Run Inference directly from your browser:</h1>
@@ -113,8 +142,12 @@ function Inference() {
             </div>
           )}
 
-          <button type="submit" class={styles.button} disabled={isLoading()}>
-            {isLoading() ? 'Processing...' : 'Run Inference'}
+          <button 
+            type="submit" 
+            class={styles.button} 
+            disabled={isLoading() || credits() <= 0}
+          >
+            {isLoading() ? 'Processing...' : credits() <= 0 ? 'No Credits Available' : 'Run Inference'}
           </button>
         </form>
 

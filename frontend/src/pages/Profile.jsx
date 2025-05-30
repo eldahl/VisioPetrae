@@ -208,6 +208,10 @@ function Profile() {
                 <h3>Bio</h3>
                 <p>{profile()?.bio || 'No bio provided'}</p>
                 </div>
+                <div class={styles.infoGroup}>
+                  <h3>Credits</h3>
+                  <p>{profile()?.credits || 0} credits remaining</p>
+                </div>
             </div>
             )}
         </div>
