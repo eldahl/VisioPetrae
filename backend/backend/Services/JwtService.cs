@@ -18,7 +18,7 @@ namespace backend.Services
         public JwtService(IConfiguration configuration)
         {
             _configuration = configuration;
-            _secretKey = _configuration["JWT:SecretKey"] ?? throw new ArgumentNullException("JWT:SecretKey");
+            _secretKey = _configuration["JWT:JWTSigningKey"] ?? throw new ArgumentNullException("JWT:JWTSigningKey");
             _issuer = _configuration["JWT:Issuer"] ?? throw new ArgumentNullException("JWT:Issuer");
             _audience = _configuration["JWT:Audience"] ?? throw new ArgumentNullException("JWT:Audience");
         }

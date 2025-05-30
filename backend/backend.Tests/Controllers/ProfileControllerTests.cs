@@ -29,9 +29,9 @@ public class ProfileControllerTests
         _loggerMock = new Mock<ILogger<ProfileController>>();
         
         _configurationMock = new Mock<IConfiguration>();
-        _configurationMock.Setup(c => c["Jwt:SecretKey"]).Returns("test-secret-key");
-        _configurationMock.Setup(c => c["Jwt:Issuer"]).Returns("test-issuer");
-        _configurationMock.Setup(c => c["Jwt:Audience"]).Returns("test-audience");
+        _configurationMock.Setup(c => c["JWT:JWTSigningKey"]).Returns("test-secret-key");
+        _configurationMock.Setup(c => c["JWT:Issuer"]).Returns("test-issuer");
+        _configurationMock.Setup(c => c["JWT:Audience"]).Returns("test-audience");
 
         _jwtServiceMock = new Mock<JwtService>(_configurationMock.Object);
         _controller = new ProfileController(_serviceMock.Object, _jwtServiceMock.Object, _loggerMock.Object);
