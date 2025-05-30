@@ -24,7 +24,7 @@ namespace VPBackend_Controllers
         public async Task<IActionResult> RequestInferenceJob(InferenceRequest job)
         {
             HttpClient client = new HttpClient();
-            client.BaseAddress = new Uri(_configuration.GetSection("REGISTRY_URL").Get<string>() ?? throw new Exception("REGISTRY_URL is not set"));
+            client.BaseAddress = new Uri(_configuration["REGISTRY_URL"] ?? throw new Exception("REGISTRY_URL is not set"));
             var response = await client.PostAsJsonAsync("Request/inferRequest", job);
             if (response.IsSuccessStatusCode)
             {
