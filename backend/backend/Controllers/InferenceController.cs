@@ -25,7 +25,6 @@ namespace VPBackend_Controllers
         {
             HttpClient client = new HttpClient();
             client.BaseAddress = new Uri(_configuration.GetSection("REGISTRY_URL").Get<string>() ?? throw new Exception("REGISTRY_URL is not set"));
-            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             var response = await client.PostAsJsonAsync("Request/inferRequest", job);
             if (response.IsSuccessStatusCode)
             {
