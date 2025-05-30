@@ -7,9 +7,12 @@ function Profile() {
   const [error, setError] = createSignal('');
   const [editMode, setEditMode] = createSignal(false);
   const [formData, setFormData] = createSignal({
-    name: '',
+    username: '',
     email: '',
-    organization: '',
+    firstName: '',
+    lastName: '',
+    bio: '',
+    avatarUrl: ''
   });
 
   onMount(async () => {
@@ -27,16 +30,25 @@ function Profile() {
       });
 
       if (!response.ok) {
+        if (response.status === 401) {
+          localStorage.removeItem('token');
+          window.location.href = '/vp/login';
+          return;
+        }
         throw new Error('Failed to fetch profile');
       }
 
       const data = await response.json();
       setProfile(data);
       setFormData({
-        name: data.name,
+        username: data.username,
         email: data.email,
-        organization: data.organization,
+        firstName: data.firstName,
+        lastName: data.lastName,
+        bio: data.bio,
+        avatarUrl: data.avatarUrl
       });
+      setLoading(false);
     } catch (err) {
       setError('Failed to load profile');
     } finally {
@@ -60,6 +72,11 @@ function Profile() {
       });
 
       if (!response.ok) {
+        if (response.status === 401) {
+          localStorage.removeItem('token');
+          window.location.href = '/vp/login';
+          return;
+        }
         throw new Error('Failed to update profile');
       }
 
@@ -84,12 +101,16 @@ function Profile() {
       <div class={styles.profileContainer}>
         <div class={styles.profileHeader}>
           <div class={styles.profileAvatar}>
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-              <circle cx="12" cy="8" r="4" />
-              <path d="M4 20c0-2.21 3.58-4 8-4s8 1.79 8 4" />
-            </svg>
+            {profile()?.avatarUrl ? (
+              <img src={profile().avatarUrl} alt="Profile" />
+            ) : (
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                <circle cx="12" cy="8" r="4" />
+                <path d="M4 20c0-2.21 3.58-4 8-4s8 1.79 8 4" />
+              </svg>
+            )}
           </div>
-          <h2>{profile()?.name}</h2>
+          <h2>{profile()?.firstName} {profile()?.lastName}</h2>
           <button 
             class={styles.button} 
             onClick={() => setEditMode(!editMode())}
@@ -101,12 +122,12 @@ function Profile() {
         {editMode() ? (
           <form onSubmit={handleSubmit} class={styles.form}>
             <div class={styles.formGroup}>
-              <label for="name">Name</label>
+              <label for="username">Username</label>
               <input
                 type="text"
-                id="name"
-                value={formData().name}
-                onInput={(e) => setFormData({ ...formData(), name: e.target.value })}
+                id="username"
+                value={formData().username}
+                onInput={(e) => setFormData({ ...formData(), username: e.target.value })}
                 required
               />
             </div>
@@ -123,12 +144,45 @@ function Profile() {
             </div>
 
             <div class={styles.formGroup}>
-              <label for="organization">Organization</label>
+              <label for="firstName">First Name</label>
               <input
                 type="text"
-                id="organization"
-                value={formData().organization}
-                onInput={(e) => setFormData({ ...formData(), organization: e.target.value })}
+                id="firstName"
+                value={formData().firstName}
+                onInput={(e) => setFormData({ ...formData(), firstName: e.target.value })}
+                required
+              />
+            </div>
+
+            <div class={styles.formGroup}>
+              <label for="lastName">Last Name</label>
+              <input
+                type="text"
+                id="lastName"
+                value={formData().lastName}
+                onInput={(e) => setFormData({ ...formData(), lastName: e.target.value })}
+                required
+              />
+            </div>
+
+            <div class={styles.formGroup}>
+              <label for="bio">Bio</label>
+              <textarea
+                id="bio"
+                value={formData().bio}
+                onInput={(e) => setFormData({ ...formData(), bio: e.target.value })}
+                rows="3"
+              />
+            </div>
+
+            <div class={styles.formGroup}>
+              <label for="avatarUrl">Avatar URL</label>
+              <input
+                type="url"
+                id="avatarUrl"
+                value={formData().avatarUrl}
+                onInput={(e) => setFormData({ ...formData(), avatarUrl: e.target.value })}
+                placeholder="https://example.com/avatar.jpg"
               />
             </div>
 
@@ -137,16 +191,16 @@ function Profile() {
         ) : (
           <div class={styles.profileInfo}>
             <div class={styles.infoGroup}>
+              <h3>Username</h3>
+              <p>{profile()?.username}</p>
+            </div>
+            <div class={styles.infoGroup}>
               <h3>Email</h3>
               <p>{profile()?.email}</p>
             </div>
             <div class={styles.infoGroup}>
-              <h3>Organization</h3>
-              <p>{profile()?.organization || 'Not specified'}</p>
-            </div>
-            <div class={styles.infoGroup}>
-              <h3>Credits</h3>
-              <p>{profile()?.credits || 0} credits remaining</p>
+              <h3>Bio</h3>
+              <p>{profile()?.bio || 'No bio provided'}</p>
             </div>
           </div>
         )}
