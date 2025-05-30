@@ -5,6 +5,7 @@ function Inference() {
   const [token, setToken] = createSignal('');
   const [selectedFile, setSelectedFile] = createSignal(null);
   const [previewUrl, setPreviewUrl] = createSignal('');
+  const [prompt, setPrompt] = createSignal('What is shown inthis image?');
   const [isLoading, setIsLoading] = createSignal(false);
   const [error, setError] = createSignal('');
   const [result, setResult] = createSignal(null);
@@ -43,6 +44,7 @@ function Inference() {
 
     const formData = new FormData();
     formData.append('file', selectedFile());
+    formData.append('prompt', prompt());
 
     try {
       const response = await fetch('https://vps.eldc.dk/api/Inference/request_inference_job', {
@@ -77,7 +79,7 @@ function Inference() {
         </div>
       </div>
 
-      <h1>Inference</h1>
+      <h1>Or.. Run Inference directly from your browser:</h1>
       <div class={styles.inferenceContainer}>
         <form onSubmit={handleSubmit}>
           {error() && <div class={styles.error}>{error()}</div>}
@@ -90,6 +92,18 @@ function Inference() {
               accept="image/*"
               onChange={handleFileChange}
               required
+            />
+          </div>
+
+          <div class={styles.formGroup}>
+            <label for="prompt">Prompt</label>
+            <textarea
+              id="prompt"
+              value={prompt()}
+              onInput={(e) => setPrompt(e.target.value)}
+              rows="4"
+              required
+              placeholder="Enter your prompt here..."
             />
           </div>
 
