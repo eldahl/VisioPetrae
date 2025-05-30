@@ -61,8 +61,12 @@ function Profile() {
     setError('');
 
     try {
+        if(!profile().uuid) {
+            setError('Profile UUID not found');
+            return;
+        }
       const token = localStorage.getItem('token');
-      const response = await fetch('https://vps.eldc.dk/api/Profile', {
+      const response = await fetch(`https://vps.eldc.dk/api/Profile/${profile().uuid}`, {
         method: 'PUT',
         headers: {
           'Authorization': `Bearer ${token}`,
