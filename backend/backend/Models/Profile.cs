@@ -1,7 +1,9 @@
 using System;
+using MongoDB.Bson.Serialization.Attributes;
 
 namespace backend.Models
 {
+    [BsonIgnoreExtraElements]
     public class Profile
     {
         public Profile(ProfileDTO dto)
