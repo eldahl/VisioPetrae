@@ -32,7 +32,6 @@ app.UseCors(builder => builder
     .AllowAnyMethod()
     .AllowAnyHeader()); 
 
-app.UseHttpsRedirection();
 app.MapControllers();
 
 app.Run();
