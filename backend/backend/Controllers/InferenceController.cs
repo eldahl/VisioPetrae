@@ -38,7 +38,7 @@ namespace VPBackend_Controllers
             // prompt
             formData.Add(new StringContent(job.prompt), "prompt");
             
-            var response = await client.PostAsJsonAsync("Request/inferRequest", formData);
+            var response = await client.PostAsync("Request/inferRequest", formData);
             if (response.IsSuccessStatusCode)
             {
                 var res = JsonSerializer.Deserialize<InferenceResponse>(await response.Content.ReadAsStringAsync());
