@@ -5,7 +5,7 @@ function Inference() {
   const [token, setToken] = createSignal('');
   const [selectedFile, setSelectedFile] = createSignal(null);
   const [previewUrl, setPreviewUrl] = createSignal('');
-  const [prompt, setPrompt] = createSignal('What is shown inthis image?');
+  const [prompt, setPrompt] = createSignal('What is shown in this image?');
   const [isLoading, setIsLoading] = createSignal(false);
   const [error, setError] = createSignal('');
   const [result, setResult] = createSignal(null);
