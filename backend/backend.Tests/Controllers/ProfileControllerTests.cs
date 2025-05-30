@@ -70,7 +70,7 @@ public class ProfileControllerTests
             .ReturnsAsync(profile);
 
         // Act
-        var result = await _controller.GetProfile(profile.Uuid);
+        var result = await _controller.GetProfile(profile.Uuid.ToString());
 
         // Assert
         var okResult = Assert.IsType<OkObjectResult>(result.Result);

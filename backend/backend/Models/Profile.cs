@@ -41,7 +41,6 @@ namespace backend.Models
 
         public void UpdatedFromDTO(ProfileDTO dto)
         {
-            this.Uuid = Guid.NewGuid();
             this.Username = dto.Username;
             this.Password = CryptographyService.HashPassword(dto.Password);
             this.Email = dto.Email;
