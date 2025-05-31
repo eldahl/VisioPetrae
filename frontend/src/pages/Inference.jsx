@@ -10,6 +10,7 @@ function Inference() {
   const [error, setError] = createSignal('');
   const [result, setResult] = createSignal(null);
   const [credits, setCredits] = createSignal(0);
+  const [isDragging, setIsDragging] = createSignal(false);
 
   onMount(async () => {
     const storedToken = localStorage.getItem('token');
@@ -40,12 +41,39 @@ function Inference() {
   const handleFileChange = (event) => {
     const file = event.target.files[0];
     if (file) {
+      processFile(file);
+    }
+  };
+
+  const processFile = (file) => {
+    if (file.type.startsWith('image/')) {
       setSelectedFile(file);
       const reader = new FileReader();
       reader.onloadend = () => {
         setPreviewUrl(reader.result);
       };
       reader.readAsDataURL(file);
+    } else {
+      setError('Please select an image file');
+    }
+  };
+
+  const handleDragOver = (e) => {
+    e.preventDefault();
+    setIsDragging(true);
+  };
+
+  const handleDragLeave = (e) => {
+    e.preventDefault();
+    setIsDragging(false);
+  };
+
+  const handleDrop = (e) => {
+    e.preventDefault();
+    setIsDragging(false);
+    const file = e.dataTransfer.files[0];
+    if (file) {
+      processFile(file);
     }
   };
 
@@ -114,15 +142,46 @@ function Inference() {
         <form onSubmit={handleSubmit}>
           {error() && <div class={styles.error}>{error()}</div>}
           
-          <div class={styles.formGroup}>
-            <label for="file">Select Image</label>
-            <input
-              type="file"
-              id="file"
-              accept="image/*"
-              onChange={handleFileChange}
-              required
-            />
+          <div class={styles.fileInputContainer}>
+            <label 
+              class={styles.fileInputLabel} 
+              classList={{ 
+                [styles.dragging]: isDragging(),
+                [styles.hasPreview]: previewUrl()
+              }}
+              onDragOver={handleDragOver}
+              onDragLeave={handleDragLeave}
+              onDrop={handleDrop}
+            >
+              {previewUrl() ? (
+                <>
+                  <img src={previewUrl()} alt="Preview" class={styles.preview} />
+                  <div class={styles.uploadText}>
+                    <p>Click or drag to change image</p>
+                  </div>
+                </>
+              ) : (
+                <div class={styles.uploadText}>
+                  <svg class={styles.uploadIcon} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>
+                  </svg>
+                  <p>Drop your image here or click to browse</p>
+                  <span>Supports: JPG, PNG, GIF</span>
+                </div>
+              )}
+              <input
+                type="file"
+                class={styles.fileInput}
+                accept="image/*"
+                onChange={handleFileChange}
+                required
+              />
+            </label>
+            {selectedFile() && (
+              <div class={styles.fileName}>
+                Selected: {selectedFile().name}
+              </div>
+            )}
           </div>
 
           <div class={styles.formGroup}>
@@ -137,12 +196,6 @@ function Inference() {
             />
           </div>
 
-          {previewUrl() && (
-            <div class={styles.previewContainer}>
-              <img src={previewUrl()} alt="Preview" class={styles.preview} />
-            </div>
-          )}
-
           <button 
             type="submit" 
             class={styles.button} 
@@ -154,8 +207,17 @@ function Inference() {
 
         {result() && (
           <div class={styles.resultContainer}>
-            <h2>Result</h2>
-            <pre>{JSON.stringify(result(), null, 2)}</pre>
+            <h2>Inference Result</h2>
+            <pre>
+              {(() => {
+                try {
+                  const jsonResult = JSON.parse(result());
+                  return JSON.stringify(jsonResult, null, 2);
+                } catch {
+                  return result();
+                }
+              })()}
+            </pre>
           </div>
         )}
       </div>
