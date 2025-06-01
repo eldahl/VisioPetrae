@@ -1,6 +1,8 @@
 import { createSignal } from 'solid-js';
 import styles from '../App.module.css';
 
+import defaultAvatar from '../assets/vp-rock-2.png';
+
 function Register() {
   const [formData, setFormData] = createSignal({
     username: '',
@@ -20,27 +22,32 @@ function Register() {
     setSuccess(false);
 
     try {
-      const response = await fetch('https://vps.eldc.dk/api/Profile', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData()),
-      });
+        // check if avatar url is empty
+        if(formData().avatarUrl === '') {
+            formData().avatarUrl = defaultAvatar;
+        }
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || 'Registration failed');
-      }
+        const response = await fetch('https://vps.eldc.dk/api/Profile', {
+            method: 'POST',
+            headers: {
+            'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(formData()),
+        });
 
-      setSuccess(true);
-      // Redirect to login after 2 seconds
-      setTimeout(() => {
-        window.location.href = '/vp/login';
-      }, 2000);
-    } catch (err) {
-      setError(err.message || 'Registration failed. Please try again.');
-    }
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.message || 'Registration failed');
+        }
+
+        setSuccess(true);
+        // Redirect to login after 2 seconds
+        setTimeout(() => {
+            window.location.href = '/vp/login';
+        }, 2000);
+        } catch (err) {
+            setError(err.message || 'Registration failed. Please try again.');
+        }
   };
 
   const handleInput = (field) => (e) => {
