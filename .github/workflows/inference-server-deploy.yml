@@ -5,11 +5,7 @@ on:
     branches: [ deploy-inference-server ]
     paths:
       - 'inference_server/**'
-  pull_request:
-    branches: [ deploy-inference-server ]
-    paths:
-      - 'inference_server/**'
-  workflow_dispatch:  # Allows manual triggering
+  workflow_dispatch:
 
 jobs:
   deploy-inference-server:
