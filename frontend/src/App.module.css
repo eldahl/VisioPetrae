@@ -403,11 +403,15 @@ body {
   max-width: 1200px;
   width: 80%;
   margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .pageContainer h1 {
   text-align: center;
   color: white;
+  width: 100%;
 }
 
 /* Features page styles */
@@ -517,6 +521,8 @@ body {
 /* Contact page styles */
 .contactForm {
   margin: 0 auto;
+  width: 80%;
+  max-width: 800px;
 }
 
 .formGroup {
@@ -598,8 +604,9 @@ body {
 }
 
 .inferenceContainer {
+  width: 80%;
   font-family: sans-serif;
-  max-width: 500px;
+  max-width: 600px;
   margin: 2rem auto;
 }
 
@@ -618,7 +625,8 @@ body {
 
 /* Login and Profile styles */
 .formContainer {
-  max-width: 400px;
+  max-width: 350px;
+  width: 350px;
   margin: 0 auto;
   background-color: #ffffff;
   padding: 2rem;
@@ -655,6 +663,7 @@ body {
 }
 
 .profileContainer {
+  width: 80%;
   max-width: 800px;
   margin: 0 auto;
   background-color: #ffffff;
@@ -714,6 +723,7 @@ body {
   .formContainer,
   .profileContainer {
     margin: 0 1rem;
+    width: 80%;
   }
 
   .profileInfo {
@@ -746,6 +756,8 @@ body {
 }
 
 .apiInfo {
+  width: 80%;
+  max-width: 800px;
   background-color: #ffffff;
   padding: 1.5rem;
   border-radius: 8px;

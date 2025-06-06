@@ -13,18 +13,18 @@ const Footer = () => {
         <div className="footer-section">
           <h4>Quick Links</h4>
           <ul>
-            <li><a href="/">Home</a></li>
-            <li><a href="/about">About</a></li>
-            <li><a href="/contact">Contact</a></li>
+            <li><a href="/vp/">Home</a></li>
+            <li><a href="/vp/features">Features</a></li>
+            <li><a href="/vp/contact">Contact</a></li>
           </ul>
         </div>
 
         <div className="footer-section">
           <h4>Resources</h4>
           <ul>
-            <li><a href="/docs">Documentation</a></li>
-            <li><a href="/api">API</a></li>
-            <li><a href="/privacy">Privacy Policy</a></li>
+            <li><a href="#"><s>Documentation</s></a></li>
+            <li><a href="#"><s>API</s></a></li>
+            <li><a href="#"><s>Privacy Policy</s></a></li>
           </ul>
         </div>
       </div>
